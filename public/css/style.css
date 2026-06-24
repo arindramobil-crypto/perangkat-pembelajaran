@@ -8,28 +8,53 @@
 
 /* ── CSS Variables ───────────────────────────────── */
 :root {
-    --lms-primary:       #4F46E5;
-    --lms-primary-hover: #4338CA;
-    --lms-accent:        #818CF8;
-    --lms-success:       #22C55E;
+    /* Primary Colors */
+    --lms-primary:       #2563EB; /* Blue 600 */
+    --lms-primary-hover: #1D4ED8; /* Blue 700 */
+    --lms-accent:        #3B82F6; /* Blue 500 */
+    
+    /* Semantic Colors */
+    --lms-success:       #10B981;
     --lms-danger:        #EF4444;
     --lms-warning:       #F59E0B;
+    --lms-info:          #0EA5E9;
 
-    --lms-bg:            #0F172A;
-    --lms-bg-panel:      rgba(15, 23, 42, 0.75);
-    --lms-bg-sidebar:    rgba(15, 23, 42, 0.95);
-    --lms-navbar-bg:     rgba(10, 16, 35, 0.98);
+    /* Light Theme (Default) Backgrounds */
+    --lms-bg:            #F1F5F9; /* Slate 100 */
+    --lms-bg-panel:      #FFFFFF; /* White */
+    --lms-bg-sidebar:    #FFFFFF; /* White */
+    --lms-navbar-bg:     #FFFFFF; /* White */
 
-    --lms-text:          #F8FAFC;
-    --lms-text-muted:    #94A3B8;
-    --lms-border:        rgba(255, 255, 255, 0.08);
+    /* Light Theme Text & Borders */
+    --lms-text:          #1E293B; /* Slate 800 */
+    --lms-text-muted:    #64748B; /* Slate 500 */
+    --lms-border:        #E2E8F0; /* Slate 200 */
+    
+    /* Shadows & Effects */
+    --lms-shadow:        0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    --lms-blur:          blur(0px); /* No blur for solid cards */
+    --lms-transition:    all 0.3s ease;
+    --lms-radius:        8px;
 
-    --lms-blur:          blur(14px);
-    --lms-transition:    all 0.25s ease;
-    --lms-radius:        12px;
-
+    /* Dimensions */
     --lms-sidebar-w:     260px;
-    --lms-navbar-h:      60px;
+    --lms-navbar-h:      65px;
+}
+
+[data-theme="dark"] {
+    /* Dark Theme Backgrounds */
+    --lms-bg:            #0F172A; /* Slate 900 */
+    --lms-bg-panel:      #1E293B; /* Slate 800 */
+    --lms-bg-sidebar:    #1E293B; /* Slate 800 */
+    --lms-navbar-bg:     #1E293B; /* Slate 800 */
+
+    /* Dark Theme Text & Borders */
+    --lms-text:          #F8FAFC; /* Slate 50 */
+    --lms-text-muted:    #94A3B8; /* Slate 400 */
+    --lms-border:        #334155; /* Slate 700 */
+    
+    /* Shadows & Effects */
+    --lms-shadow:        0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
 }
 
 /* ── Reset & Base ────────────────────────────────── */
@@ -42,20 +67,9 @@ html, body {
 
 body {
     background-color: var(--lms-bg);
-    background-image:
-        radial-gradient(ellipse at 10% 20%, rgba(79, 70, 229, 0.25) 0%, transparent 60%),
-        radial-gradient(ellipse at 90% 80%, rgba(139, 92, 246, 0.2) 0%, transparent 60%),
-        radial-gradient(ellipse at 50% 50%, rgba(56, 189, 248, 0.1) 0%, transparent 70%);
-    background-attachment: fixed;
-    background-size: 200% 200%;
     color: var(--lms-text);
     min-height: 100vh;
-    animation: gradientMove 15s ease infinite alternate;
-}
-
-@keyframes gradientMove {
-    0% { background-position: 0% 0%; }
-    100% { background-position: 100% 100%; }
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* ── Page Transitions ────────────────────────────── */
@@ -474,13 +488,13 @@ body {
    GLASS PANEL CARD
    ══════════════════════════════════════════════════ */
 .glass-panel {
-    background: rgba(30, 41, 59, 0.6);
+    background: var(--lms-bg-panel);
     backdrop-filter: var(--lms-blur);
     -webkit-backdrop-filter: var(--lms-blur);
     border: 1px solid var(--lms-border);
     border-radius: var(--lms-radius);
-    box-shadow: 0 8px 32px rgba(0,0,0,0.25);
-    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease, border-color 0.3s ease;
+    box-shadow: var(--lms-shadow);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease, border-color 0.3s ease, background-color 0.3s ease;
 }
 .glass-panel.hoverable:hover {
     transform: translateY(-4px);
@@ -789,3 +803,8 @@ table.dataTable.no-footer { border-bottom: 1px solid var(--lms-border) !importan
 }
 .notif-menu-footer a:hover { text-decoration: underline; }
 
+
+ / *   T h e m e   O v e r r i d e s   * / 
+ . t e x t - w h i t e   {   c o l o r :   v a r ( - - l m s - t e x t )   ! i m p o r t a n t ;   } 
+ . b g - d a r k   {   b a c k g r o u n d - c o l o r :   v a r ( - - l m s - b g - p a n e l )   ! i m p o r t a n t ;   }  
+ 

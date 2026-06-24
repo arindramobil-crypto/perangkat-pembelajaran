@@ -12,8 +12,14 @@ $_logoFile    = $_sekolah['logo']        ?? null;
 $_logoUrl     = $_logoFile ? base_url('uploads/logo/' . $_logoFile) : null;
 ?>
 <!DOCTYPE html>
-<html lang="id" data-bs-theme="dark">
+<html lang="id">
 <head>
+    <script>
+        // Set theme as early as possible to prevent FOUC
+        const savedTheme = localStorage.getItem('lms_theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        document.documentElement.setAttribute('data-bs-theme', savedTheme);
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= esc($title ?? 'Dashboard') ?> — <?= esc($_namaSekolah) ?></title>
@@ -67,6 +73,12 @@ $_logoUrl     = $_logoFile ? base_url('uploads/logo/' . $_logoFile) : null;
     <div class="ms-auto d-flex align-items-center gap-3">
 
         <!-- Notifikasi Bell -->
+        <!-- Theme Toggle -->
+        <button class="btn lms-notif-btn me-2" id="themeToggleBtn" title="Ganti Tema">
+            <i class="bi bi-moon-stars-fill fs-5" id="themeIcon"></i>
+        </button>
+
+        <!-- Notifications -->
         <div class="dropdown" id="notifDropdown">
             <button class="btn lms-notif-btn position-relative" id="notifBell"
                     data-bs-toggle="dropdown" aria-expanded="false"
@@ -510,6 +522,31 @@ if (markAllBtn) {
 pollNotifUnread();
 setInterval(pollNotifUnread, 60000);
 <?php endif; ?>
+// Theme Toggle Logic
+const themeBtn = document.getElementById('themeToggleBtn');
+const themeIcon = document.getElementById('themeIcon');
+if (themeIcon) {
+    // Initial icon state
+    if (document.documentElement.getAttribute('data-theme') === 'dark') {
+        themeIcon.classList.replace('bi-moon-stars-fill', 'bi-sun-fill');
+    }
+}
+if (themeBtn) {
+    themeBtn.addEventListener('click', () => {
+        let currentTheme = document.documentElement.getAttribute('data-theme');
+        let newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        
+        document.documentElement.setAttribute('data-theme', newTheme);
+        document.documentElement.setAttribute('data-bs-theme', newTheme);
+        localStorage.setItem('lms_theme', newTheme);
+        
+        if (newTheme === 'dark') {
+            themeIcon.classList.replace('bi-moon-stars-fill', 'bi-sun-fill');
+        } else {
+            themeIcon.classList.replace('bi-sun-fill', 'bi-moon-stars-fill');
+        }
+    });
+}
 </script>
 
 <!-- Extra scripts dari child view -->
