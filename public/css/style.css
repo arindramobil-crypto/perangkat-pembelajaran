@@ -905,3 +905,56 @@ table.dataTable.no-footer { border-bottom: 1px solid var(--lms-border) !importan
 
 /* Sidebar sidebar scrollbar light mode */
 :root .lms-sidebar::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); }
+
+/* ══════════════════════════════════════════════════
+   INLINE STYLE OVERRIDES (Light Mode)
+   Menimpa style="color:white" & style="color:#fff"
+   yang tertanam langsung di dalam HTML Views
+   ══════════════════════════════════════════════════ */
+
+/* Di light mode, semua elemen dengan inline color:white → pakai warna teks */
+:root [style*="color: white"],
+:root [style*="color:white"],
+:root [style*="color: #fff"],
+:root [style*="color:#fff"],
+:root [style*="color: #FFF"],
+:root [style*="color:#FFF"],
+:root [style*="color: #F8FAFC"],
+:root [style*="color:#F8FAFC"] {
+    color: var(--lms-text) !important;
+}
+
+/* Tapi di dark mode, biarkan tetap putih */
+[data-theme="dark"] [style*="color: white"],
+[data-theme="dark"] [style*="color:white"],
+[data-theme="dark"] [style*="color: #fff"],
+[data-theme="dark"] [style*="color:#fff"],
+[data-theme="dark"] [style*="color: #FFF"],
+[data-theme="dark"] [style*="color:#FFF"],
+[data-theme="dark"] [style*="color: #F8FAFC"],
+[data-theme="dark"] [style*="color:#F8FAFC"] {
+    color: #F8FAFC !important;
+}
+
+/* Background gelap di inline style → pakai panel */
+:root [style*="background: rgba(15"],
+:root [style*="background:rgba(15"],
+:root [style*="background: rgba(30"],
+:root [style*="background:rgba(30"] {
+    background: var(--lms-bg-panel) !important;
+}
+
+/* Table thead dengan background gelap */
+:root thead[style*="background:rgba(15"],
+:root thead[style*="background: rgba(15"] {
+    background: var(--lms-border) !important;
+    color: var(--lms-text) !important;
+}
+
+/* Border putih inline */
+:root [style*="border-bottom: 1px solid rgba(255,255,255"] {
+    border-bottom-color: var(--lms-border) !important;
+}
+:root [style*="border: 1px solid rgba(255,255,255"] {
+    border-color: var(--lms-border) !important;
+}

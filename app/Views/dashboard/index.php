@@ -11,18 +11,19 @@ $greeting = $hour < 11 ? 'Selamat Pagi' : ($hour < 15 ? 'Selamat Siang' : ($hour
 <style>
 /* ── Dashboard Styles ─────────────────────────── */
 .stat-card {
-    background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(255,255,255,0.08);
+    background: var(--lms-bg-panel);
+    border: 1px solid var(--lms-border);
     border-radius: 16px;
     padding: 1.4rem 1.5rem;
     display: flex;
     align-items: center;
     gap: 1rem;
-    transition: transform 0.2s, border-color 0.2s;
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
     text-decoration: none;
     color: inherit;
     position: relative;
     overflow: hidden;
+    box-shadow: var(--lms-shadow);
 }
 .stat-card::before {
     content: '';
@@ -61,19 +62,20 @@ $greeting = $hour < 11 ? 'Selamat Pagi' : ($hour < 15 ? 'Selamat Siang' : ($hour
 }
 
 .chart-card {
-    background: rgba(255,255,255,0.02);
+    background: var(--lms-bg-panel);
     border: 1px solid var(--lms-border);
     border-radius: 16px;
     padding: 1.5rem;
+    box-shadow: var(--lms-shadow);
 }
 .chart-card h5 {
-    font-size: 0.9rem; font-weight: 700; color: white; margin-bottom: 1.25rem;
+    font-size: 0.9rem; font-weight: 700; color: var(--lms-text); margin-bottom: 1.25rem;
     display: flex; align-items: center; gap: 8px;
 }
 
 .activity-item {
     display: flex; align-items: center; gap: 12px;
-    padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05);
+    padding: 10px 0; border-bottom: 1px solid var(--lms-border);
 }
 .activity-item:last-child { border-bottom: none; }
 .activity-dot {
@@ -83,13 +85,13 @@ $greeting = $hour < 11 ? 'Selamat Pagi' : ($hour < 15 ? 'Selamat Siang' : ($hour
 .quick-btn {
     display: flex; align-items: center; gap: 12px;
     padding: 13px 16px; border-radius: 12px;
-    background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(255,255,255,0.07);
+    background: var(--lms-bg);
+    border: 1px solid var(--lms-border);
     color: var(--lms-text-muted); font-size: 0.85rem;
     font-weight: 500; text-decoration: none;
     transition: all 0.2s; margin-bottom: 8px;
 }
-.quick-btn:hover { background: rgba(255,255,255,0.07); color: white; text-decoration: none; border-color: rgba(255,255,255,0.12); }
+.quick-btn:hover { background: var(--lms-bg-panel); color: var(--lms-primary); text-decoration: none; border-color: var(--lms-primary); }
 .quick-btn i { font-size: 1rem; width: 20px; text-align: center; }
 
 .badge-tipe {
