@@ -311,6 +311,13 @@ $_logoUrl     = $_logoFile ? base_url('uploads/logo/' . $_logoFile) : null;
                 <span>Logout</span>
             </a>
         </div>
+
+        <div class="mt-auto py-3 text-center" style="font-size:0.75rem; color:#64748b; border-top: 1px solid rgba(255,255,255,0.05); margin-top: auto;">
+            <?php $appVersion = new \Config\AppVersion(); ?>
+            Perangkat Pembelajaran &copy; <?= date('Y') ?><br>
+            Terakhir diperbarui:<br>
+            <span class="text-white"><?= esc($appVersion->lastUpdated) ?></span>
+        </div>
     </aside>
     <!-- ========== END SIDEBAR ===================== -->
 
