@@ -4,27 +4,104 @@
 <!-- FullCalendar CSS -->
 <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet">
 <style>
-/* Customizing FullCalendar for Dark/Glassmorphism Theme */
-.fc-theme-standard .fc-scrollgrid { border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; overflow: hidden; }
-.fc-theme-standard td, .fc-theme-standard th { border: 1px solid rgba(255,255,255,0.05); }
-.fc-theme-standard th { padding: 10px 0; background: rgba(255,255,255,0.03); color: #94A3B8; font-weight: 600; font-size: 0.85rem; text-transform: uppercase; }
-.fc-daygrid-day-number { color: #F8FAFC; padding: 8px !important; font-weight: 500; text-decoration: none; }
-.fc-day-today { background: rgba(129, 140, 248, 0.1) !important; }
-.fc-h-event { border: none; border-radius: 4px; padding: 2px 4px; font-size: 0.75rem; font-weight: 600; cursor: pointer; transition: transform 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
-.fc-h-event:hover { transform: translateY(-1px); }
-.fc-toolbar-title { font-size: 1.25rem !important; font-weight: 700; color: white; }
-.fc-button-primary { background: rgba(255,255,255,0.05) !important; border: 1px solid rgba(255,255,255,0.1) !important; color: #E2E8F0 !important; box-shadow: none !important; text-transform: capitalize; transition: all 0.2s; }
-.fc-button-primary:hover { background: rgba(129, 140, 248, 0.15) !important; color: #818CF8 !important; border-color: rgba(129, 140, 248, 0.3) !important; }
-.fc-button-active { background: #818CF8 !important; color: white !important; border-color: #818CF8 !important; }
+/* ── FullCalendar: Tema Dinamis (Light & Dark) ── */
 
-/* Legend Container */
-.legend-box { display: inline-flex; align-items: center; gap: 6px; font-size: 0.8rem; color: #94A3B8; margin-right: 16px; }
+/* Grid border */
+.fc-theme-standard .fc-scrollgrid {
+    border: 1px solid var(--lms-border);
+    border-radius: 12px;
+    overflow: hidden;
+}
+.fc-theme-standard td,
+.fc-theme-standard th {
+    border: 1px solid var(--lms-border);
+}
+
+/* Header hari (Sen, Sel, Rab, ...) */
+.fc-theme-standard th {
+    padding: 10px 0;
+    background: var(--lms-bg);
+    color: var(--lms-text-muted);
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+}
+
+/* Nomor tanggal */
+.fc-daygrid-day-number {
+    color: var(--lms-text) !important;
+    padding: 8px !important;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+/* Hari ini */
+.fc-day-today {
+    background: rgba(37, 99, 235, 0.08) !important;
+}
+
+/* Event bar */
+.fc-h-event {
+    border: none;
+    border-radius: 4px;
+    padding: 2px 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+}
+.fc-h-event:hover { transform: translateY(-1px); }
+
+/* Judul bulan & tombol navigasi */
+.fc-toolbar-title {
+    font-size: 1.25rem !important;
+    font-weight: 700;
+    color: var(--lms-text) !important;
+}
+.fc-button-primary {
+    background: var(--lms-bg-panel) !important;
+    border: 1px solid var(--lms-border) !important;
+    color: var(--lms-text) !important;
+    box-shadow: none !important;
+    text-transform: capitalize;
+    transition: all 0.2s;
+}
+.fc-button-primary:hover {
+    background: rgba(37,99,235,0.1) !important;
+    color: var(--lms-primary) !important;
+    border-color: var(--lms-primary) !important;
+}
+.fc-button-active,
+.fc-button-primary:not(:disabled).fc-button-active {
+    background: var(--lms-primary) !important;
+    color: white !important;
+    border-color: var(--lms-primary) !important;
+}
+
+/* Sel hari kosong */
+.fc-daygrid-day {
+    background: var(--lms-bg-panel);
+}
+.fc-daygrid-day.fc-day-other {
+    background: var(--lms-bg);
+}
+
+/* Legend */
+.legend-box {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8rem;
+    color: var(--lms-text-muted);
+    margin-right: 16px;
+}
 .legend-color { width: 12px; height: 12px; border-radius: 3px; }
 </style>
 
 <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
     <div>
-        <h4 style="color:white;font-weight:800;margin:0;">
+        <h4 class="fw-800" style="margin:0;color:var(--lms-text);font-weight:800;">
             <i class="bi bi-calendar3 me-2 text-accent"></i>Kalender Akademik
         </h4>
         <small class="text-lms-muted">Jadwal libur, ujian, dan kegiatan sekolah</small>
@@ -117,8 +194,8 @@
             </div>
             <div class="modal-body p-4 text-center">
                 <span class="badge mb-3" id="viewTipe" style="font-size:0.8rem;padding:6px 12px;"></span>
-                <h6 class="text-white mb-2" id="viewDateRange" style="font-size:1.1rem;"></h6>
-                <p class="text-lms-muted mb-0 mt-3" id="viewDesc" style="white-space:pre-wrap;text-align:left;background:rgba(255,255,255,0.03);padding:12px;border-radius:8px;"></p>
+                <h6 class="mb-2" id="viewDateRange" style="font-size:1.1rem;color:var(--lms-text);"></h6>
+                <p class="text-lms-muted mb-0 mt-3" id="viewDesc" style="white-space:pre-wrap;text-align:left;background:var(--lms-bg);padding:12px;border-radius:8px;"></p>
             </div>
             <div class="modal-footer border-secondary border-opacity-25">
                 <button type="button" class="btn btn-secondary btn-sm w-100" data-bs-dismiss="modal">Tutup</button>
@@ -268,7 +345,7 @@ function hapusAgenda() {
     if(!confirm('Hapus acara ini dari kalender?')) return;
     
     let id = document.getElementById('agendaId').value;
-    let csrfToken = document.querySelector('input[name="csrf_test_name"]').value;
+    let csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     
     let fd = new FormData();
     fd.append('csrf_test_name', csrfToken);
