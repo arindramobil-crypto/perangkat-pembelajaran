@@ -8,9 +8,14 @@
         </h4>
         <small class="text-lms-muted">Koleksi perangkat ajar digital Anda.</small>
     </div>
-    <a href="<?= base_url('rpp/create') ?>" class="btn btn-primary shadow-sm">
-        <i class="bi bi-cloud-arrow-up me-1"></i> Upload / Buat Baru
-    </a>
+    <div class="d-flex gap-2">
+        <a href="<?= base_url('rpp/create') ?>" class="btn btn-outline-light shadow-sm">
+            <i class="bi bi-file-earmark-arrow-up me-1"></i> Upload File
+        </a>
+        <a href="<?= base_url('rpp/create_template') ?>" class="btn btn-primary shadow-sm">
+            <i class="bi bi-magic me-1"></i> Buat RPP Digital
+        </a>
+    </div>
 </div>
 
 <?php if (session()->getFlashdata('success')): ?>
@@ -62,10 +67,18 @@
                         <?php else: ?>
                             <span class="badge" style="background:rgba(56,189,248,0.15); color:#7DD3FC;"><i class="bi bi-file-word"></i> Word File</span>
                         <?php endif; ?>
+                    <?php elseif (!empty($r['konten'])): ?>
+                        <span class="badge" style="background:rgba(16,185,129,0.15); color:#34D399;"><i class="bi bi-magic"></i> RPP Digital</span>
                     <?php else: ?>
                         <span class="badge" style="background:rgba(245,158,11,0.15); color:#FCD34D;"><i class="bi bi-exclamation-triangle"></i> Tanpa File</span>
                     <?php endif; ?>
-                    <a href="<?= base_url('rpp/view/'.$r['id']) ?>" class="btn btn-sm btn-outline-light rounded-pill" style="font-size:0.75rem;">Buka <i class="bi bi-arrow-right"></i></a>
+                    
+                    <div class="d-flex gap-1">
+                        <?php if(!empty($r['konten']) && empty($r['file_path'])): ?>
+                            <a href="<?= base_url('rpp/print/'.$r['id']) ?>" target="_blank" class="btn btn-sm btn-outline-success rounded-pill" style="font-size:0.75rem;" title="Cetak RPP"><i class="bi bi-printer"></i> Cetak</a>
+                        <?php endif; ?>
+                        <a href="<?= base_url('rpp/view/'.$r['id']) ?>" class="btn btn-sm btn-outline-light rounded-pill" style="font-size:0.75rem;">Buka <i class="bi bi-arrow-right"></i></a>
+                    </div>
                 </div>
             </div>
         </div>

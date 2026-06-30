@@ -44,6 +44,20 @@ class Rpp extends BaseController
         ];
 
         return view('rpp/form', $data);
+    public function create_template()
+    {
+        if (session()->get('role') !== 'Guru') return redirect()->to('/dashboard');
+
+        $kelasModel = new KelasModel();
+        $mapelModel = new MataPelajaranModel();
+        
+        $data = [
+            'title' => 'Buat RPP Digital',
+            'kelas' => $kelasModel->findAll(),
+            'mapel' => $mapelModel->findAll()
+        ];
+
+        return view('rpp/form_template', $data);
     }
 
     public function save()
@@ -59,26 +73,34 @@ class Rpp extends BaseController
             'mapel_id' => $this->request->getVar('mapel_id'),
             'kelas_id' => $this->request->getVar('kelas_id'),
             'judul'    => $this->request->getVar('judul'),
-            'konten'   => null, // Not used anymore
         ];
 
-        // Handle File Upload
-        $file = $this->request->getFile('file_lampiran');
-        if ($file && $file->isValid() && !$file->hasMoved()) {
-            $newName = $file->getRandomName();
-            // Pindahkan file ke writable/uploads/rpp
-            $file->move(FCPATH . 'uploads/rpp', $newName);
-            
-            // Hapus file lama jika ada
-            if ($id) {
-                $oldRpp = $rppModel->find($id);
-                if ($oldRpp['file_path'] && file_exists(FCPATH . 'uploads/rpp/' . $oldRpp['file_path'])) {
-                    unlink(FCPATH . 'uploads/rpp/' . $oldRpp['file_path']);
+        $isTemplate = $this->request->getVar('is_template');
+        if ($isTemplate) {
+            // Save as JSON template
+            $templateData = $this->request->getVar('template'); // Array of template fields
+            $data['konten'] = json_encode($templateData);
+            // No file uploaded
+        } else {
+            // Handle File Upload
+            $file = $this->request->getFile('file_lampiran');
+            if ($file && $file->isValid() && !$file->hasMoved()) {
+                $newName = $file->getRandomName();
+                // Pindahkan file ke writable/uploads/rpp
+                $file->move(FCPATH . 'uploads/rpp', $newName);
+                
+                // Hapus file lama jika ada
+                if ($id) {
+                    $oldRpp = $rppModel->find($id);
+                    if ($oldRpp['file_path'] && file_exists(FCPATH . 'uploads/rpp/' . $oldRpp['file_path'])) {
+                        unlink(FCPATH . 'uploads/rpp/' . $oldRpp['file_path']);
+                    }
                 }
+                $data['file_path'] = $newName;
+                $data['konten'] = null;
+            } else if (!$id) {
+                return redirect()->back()->with('error', 'File RPP wajib diunggah.');
             }
-            $data['file_path'] = $newName;
-        } else if (!$id) {
-            return redirect()->back()->with('error', 'File RPP wajib diunggah.');
         }
 
         if ($id) {
@@ -114,6 +136,11 @@ class Rpp extends BaseController
             'mapel' => $mapelModel->findAll()
         ];
 
+        if (!empty($rpp['konten'])) {
+            $data['template'] = json_decode($rpp['konten'], true);
+            return view('rpp/form_template', $data);
+        }
+
         return view('rpp/form', $data);
     }
 
@@ -137,6 +164,35 @@ class Rpp extends BaseController
         ];
 
         return view('rpp/view', $data);
+    }
+
+    public function print($id)
+    {
+        if (!session()->get('id')) return redirect()->to('/login');
+
+        $rppModel = new RppModel();
+        $rpp = $rppModel->select('rpp_digital.*, kelas.nama_kelas, mata_pelajaran.nama_mapel, users.nama_lengkap as nama_guru, gurus.nip')
+                        ->join('kelas', 'kelas.id = rpp_digital.kelas_id')
+                        ->join('mata_pelajaran', 'mata_pelajaran.id = rpp_digital.mapel_id')
+                        ->join('gurus', 'gurus.id = rpp_digital.guru_id')
+                        ->join('users', 'users.id = gurus.user_id')
+                        ->find($id);
+
+        if (!$rpp || empty($rpp['konten'])) {
+            return redirect()->back()->with('error', 'Format RPP Digital tidak ditemukan.');
+        }
+
+        $pengaturanModel = new \App\Models\PengaturanSekolahModel();
+        $sekolah = $pengaturanModel->first();
+
+        $data = [
+            'title'   => 'Cetak RPP: ' . $rpp['judul'],
+            'rpp'     => $rpp,
+            'template'=> json_decode($rpp['konten'], true),
+            'sekolah' => $sekolah
+        ];
+
+        return view('rpp/print', $data);
     }
 
     public function delete($id)
