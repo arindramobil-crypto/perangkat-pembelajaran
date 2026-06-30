@@ -38,8 +38,9 @@ $_logoUrl     = $_logoFile ? base_url('uploads/logo/' . $_logoFile) : null;
     <!-- DataTables Bootstrap 5 -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
 
-    <!-- Custom Theme -->
-    <link rel="stylesheet" href="<?= base_url('css/style.css') ?>">
+    <!-- Custom Theme (versi untuk cache busting) -->
+    <?php $appVersion = new \Config\AppVersion(); $cssVer = urlencode($appVersion->lastUpdated); ?>
+    <link rel="stylesheet" href="<?= base_url('css/style.css') ?>?v=<?= $cssVer ?>">
 
     <!-- CSRF Token (untuk AJAX/Fetch request) -->
     <meta name="csrf-token" content="<?= csrf_hash() ?>">
@@ -522,31 +523,39 @@ if (markAllBtn) {
 pollNotifUnread();
 setInterval(pollNotifUnread, 60000);
 <?php endif; ?>
-// Theme Toggle Logic
-const themeBtn = document.getElementById('themeToggleBtn');
-const themeIcon = document.getElementById('themeIcon');
-if (themeIcon) {
-    // Initial icon state
-    if (document.documentElement.getAttribute('data-theme') === 'dark') {
-        themeIcon.classList.replace('bi-moon-stars-fill', 'bi-sun-fill');
+</script>
+
+<!-- Theme Toggle Script (terpisah agar tidak konflik) -->
+<script>
+(function() {
+    const themeBtn  = document.getElementById('themeToggleBtn');
+    const themeIcon = document.getElementById('themeIcon');
+
+    // Set ikon sesuai tema saat ini
+    function syncIcon() {
+        if (!themeIcon) return;
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        themeIcon.className = isDark
+            ? 'bi bi-sun-fill fs-5'
+            : 'bi bi-moon-stars-fill fs-5';
     }
-}
-if (themeBtn) {
-    themeBtn.addEventListener('click', () => {
-        let currentTheme = document.documentElement.getAttribute('data-theme');
-        let newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        
-        document.documentElement.setAttribute('data-theme', newTheme);
-        document.documentElement.setAttribute('data-bs-theme', newTheme);
-        localStorage.setItem('lms_theme', newTheme);
-        
-        if (newTheme === 'dark') {
-            themeIcon.classList.replace('bi-moon-stars-fill', 'bi-sun-fill');
-        } else {
-            themeIcon.classList.replace('bi-sun-fill', 'bi-moon-stars-fill');
-        }
-    });
-}
+
+    // Terapkan ikon saat pertama load
+    syncIcon();
+
+    // Event klik tombol sakelar
+    if (themeBtn) {
+        themeBtn.addEventListener('click', function() {
+            const current  = document.documentElement.getAttribute('data-theme') || 'light';
+            const newTheme = current === 'dark' ? 'light' : 'dark';
+
+            document.documentElement.setAttribute('data-theme',    newTheme);
+            document.documentElement.setAttribute('data-bs-theme', newTheme);
+            localStorage.setItem('lms_theme', newTheme);
+            syncIcon();
+        });
+    }
+})();
 </script>
 
 <!-- Extra scripts dari child view -->
