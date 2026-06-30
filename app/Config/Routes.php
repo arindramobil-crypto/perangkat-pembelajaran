@@ -146,9 +146,11 @@ $routes->group('jurnal', ['filter' => 'authGuard'], static function ($routes) {
 $routes->group('rpp', ['filter' => 'authGuard'], static function ($routes) {
     $routes->get('/',               'Rpp::index');
     $routes->get('create',          'Rpp::create');
+    $routes->get('create_template', 'Rpp::create_template');
     $routes->post('save',           'Rpp::save');
     $routes->get('edit/(:num)',     'Rpp::edit/$1');
     $routes->get('view/(:num)',     'Rpp::view/$1');
+    $routes->get('print/(:num)',    'Rpp::print/$1');
     $routes->get('delete/(:num)',   'Rpp::delete/$1');
 });
 
