@@ -51,7 +51,20 @@
 
                 <div class="mb-4">
                     <label class="form-label text-white small">Siswa Tidak Hadir (Opsional)</label>
-                    <input type="text" name="siswa_absen" class="form-control lms-input" placeholder="Contoh: Budi (Sakit), Ani (Izin)" value="<?= isset($jurnal) ? esc($jurnal['siswa_absen']) : '' ?>">
+                    <?php
+                        $absenList = [];
+                        if(isset($jurnal) && !empty($jurnal['siswa_absen'])) {
+                            $absenList = array_map('trim', explode(',', $jurnal['siswa_absen']));
+                        }
+                    ?>
+                    <select name="siswa_absen[]" id="siswa_absen" class="form-select lms-input" multiple="multiple">
+                        <?php foreach($absenList as $absen): ?>
+                            <?php if(!empty($absen)): ?>
+                                <option value="<?= esc($absen) ?>" selected><?= esc($absen) ?></option>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                    </select>
+                    <small class="text-lms-muted mt-1 d-block">Bisa pilih dari daftar atau ketik nama lalu Enter.</small>
                 </div>
 
                 <div class="d-flex justify-content-between border-top border-secondary border-opacity-25 pt-3">
@@ -71,4 +84,62 @@
     </div>
 </div>
 
+<?= $this->endSection() ?>
+
+<?= $this->section('scripts') ?>
+<!-- jQuery wajib untuk Select2 -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
+$(document).ready(function() {
+    // Inisialisasi Select2
+    $('#siswa_absen').select2({
+        theme: 'bootstrap-5',
+        tags: true, // Izinkan ketik manual
+        placeholder: "Pilih siswa atau ketik nama...",
+        allowClear: true,
+        width: '100%'
+    });
+
+    // Handle saat Jadwal/Kelas diganti
+    $('select[name="jadwal_id"]').on('change', function() {
+        let jadwal_id = $(this).val();
+        let $selectSiswa = $('#siswa_absen');
+        
+        if(jadwal_id) {
+            $.ajax({
+                url: '<?= base_url('jurnal/getSiswaByJadwal') ?>/' + jadwal_id,
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    // Hapus opsi yang belum dipilih (membersihkan opsi kelas sebelumnya)
+                    $selectSiswa.find('option').each(function() {
+                        if (!$(this).is(':selected')) {
+                            $(this).remove();
+                        }
+                    });
+
+                    // Tambahkan opsi siswa dari JSON
+                    data.forEach(function(item) {
+                        let name = item.nama_lengkap;
+                        // Tambahkan "(Sakit/Izin)" manual via ketik, di sini kita beri opsi base name saja
+                        if ($selectSiswa.find("option[value='" + name + "']").length === 0) {
+                            var newOption = new Option(name, name, false, false);
+                            $selectSiswa.append(newOption);
+                        }
+                    });
+                    $selectSiswa.trigger('change');
+                },
+                error: function() {
+                    console.error("Gagal mengambil data siswa.");
+                }
+            });
+        }
+    });
+
+    // Trigger saat edit agar siswa di kelas ybs juga termuat ke opsi
+    if($('select[name="jadwal_id"]').val()) {
+        $('select[name="jadwal_id"]').trigger('change');
+    }
+});
+</script>
 <?= $this->endSection() ?>

@@ -4,6 +4,7 @@ namespace App\Controllers;
 use App\Models\JurnalModel;
 use App\Models\GuruModel;
 use App\Models\JadwalModel;
+use App\Models\AnggotaKelasModel;
 
 class Jurnal extends BaseController
 {
@@ -53,6 +54,11 @@ class Jurnal extends BaseController
         $jurnalModel = new JurnalModel();
         $id = $this->request->getVar('id');
 
+        $siswaAbsen = $this->request->getVar('siswa_absen');
+        if (is_array($siswaAbsen)) {
+            $siswaAbsen = implode(', ', $siswaAbsen);
+        }
+
         $data = [
             'guru_id'           => $guru['id'],
             'jadwal_id'         => $this->request->getVar('jadwal_id'),
@@ -60,7 +66,7 @@ class Jurnal extends BaseController
             'jam_ke'            => $this->request->getVar('jam_ke'),
             'materi_pembahasan' => $this->request->getVar('materi_pembahasan'),
             'catatan_kejadian'  => $this->request->getVar('catatan_kejadian'),
-            'siswa_absen'       => $this->request->getVar('siswa_absen'),
+            'siswa_absen'       => $siswaAbsen,
         ];
 
         if ($id) {
@@ -111,5 +117,25 @@ class Jurnal extends BaseController
 
         $jurnalModel->delete($id);
         return redirect()->to('/jurnal')->with('success', 'Jurnal berhasil dihapus.');
+    }
+
+    /**
+     * Mengambil daftar siswa berdasarkan jadwal_id via AJAX
+     */
+    public function getSiswaByJadwal($jadwal_id)
+    {
+        if (session()->get('role') !== 'Guru') return $this->response->setJSON([]);
+
+        $jadwalModel = new JadwalModel();
+        $jadwal = $jadwalModel->find($jadwal_id);
+
+        if (!$jadwal) {
+            return $this->response->setJSON([]);
+        }
+
+        $anggotaModel = new AnggotaKelasModel();
+        $siswaList = $anggotaModel->getAnggotaByKelasTahun($jadwal['kelas_id'], $jadwal['tahun_pelajaran_id']);
+
+        return $this->response->setJSON($siswaList);
     }
 }
