@@ -44,6 +44,8 @@ class Rpp extends BaseController
         ];
 
         return view('rpp/form', $data);
+    }
+
     public function create_template()
     {
         if (session()->get('role') !== 'Guru') return redirect()->to('/dashboard');
