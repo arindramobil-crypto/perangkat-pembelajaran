@@ -958,3 +958,79 @@ table.dataTable.no-footer { border-bottom: 1px solid var(--lms-border) !importan
 :root [style*="border: 1px solid rgba(255,255,255"] {
     border-color: var(--lms-border) !important;
 }
+
+/* ══════════════════════════════════════════════════
+   MOBILE BOTTOM NAVIGATION (APP-LIKE UI)
+   ══════════════════════════════════════════════════ */
+.lms-bottom-nav {
+    display: none; /* Sembunyikan di desktop */
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 65px;
+    background: var(--lms-navbar-bg);
+    backdrop-filter: var(--lms-blur);
+    -webkit-backdrop-filter: var(--lms-blur);
+    border-top: 1px solid var(--lms-border);
+    z-index: 1040;
+    justify-content: space-around;
+    align-items: center;
+    padding-bottom: env(safe-area-inset-bottom);
+    box-shadow: 0 -4px 10px rgba(0,0,0,0.05);
+}
+
+[data-theme="dark"] .lms-bottom-nav {
+    box-shadow: 0 -4px 10px rgba(0,0,0,0.3);
+}
+
+.bottom-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--lms-text-muted);
+    text-decoration: none;
+    font-size: 0.7rem;
+    font-weight: 600;
+    flex: 1;
+    height: 100%;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.bottom-nav-item i {
+    font-size: 1.3rem;
+    margin-bottom: 2px;
+}
+
+.bottom-nav-item:hover, .bottom-nav-item.active {
+    color: var(--lms-primary);
+}
+
+/* Efek saat ditekan */
+.bottom-nav-item:active {
+    transform: scale(0.92);
+}
+
+@media (max-width: 768px) {
+    /* Munculkan bottom nav di HP */
+    .lms-bottom-nav {
+        display: flex;
+    }
+    
+    /* Tambah padding bawah pada konten utama agar tidak tertutup nav */
+    body {
+        padding-bottom: 65px; 
+    }
+
+    /* Sembunyikan toggle sidebar atas karena sudah ada tombol 'Lainnya' di bawah */
+    #sidebarToggle { 
+        display: none !important; 
+    }
+
+    /* Modifikasi tampilan sidebar saat dipanggil dari bottom nav */
+    .lms-sidebar {
+        z-index: 1050; /* Di atas bottom nav */
+        padding-bottom: 65px; /* Supaya scroll tidak mentok bawah jika ditutupi bottom nav (jika z-index di bawah) */
+    }
+}

@@ -568,5 +568,75 @@ setInterval(pollNotifUnread, 60000);
 <!-- Extra scripts dari child view -->
 <?= $this->renderSection('scripts') ?>
 
+<!-- ===================== BOTTOM NAVIGATION (MOBILE) ===================== -->
+<?php if (session()->get('id')): ?>
+<nav class="lms-bottom-nav">
+    <a href="<?= base_url('dashboard') ?>" class="bottom-nav-item <?= uri_string() === 'dashboard' ? 'active' : '' ?>">
+        <i class="bi <?= uri_string() === 'dashboard' ? 'bi-house-door-fill' : 'bi-house-door' ?>"></i>
+        <span>Beranda</span>
+    </a>
+    
+    <?php if (session()->get('role') === 'Guru'): ?>
+        <a href="<?= base_url('presensi') ?>" class="bottom-nav-item <?= str_contains(uri_string(), 'presensi') ? 'active' : '' ?>">
+            <i class="bi <?= str_contains(uri_string(), 'presensi') ? 'bi-check2-square' : 'bi-check2-circle' ?>"></i>
+            <span>Presensi</span>
+        </a>
+        <a href="<?= base_url('jurnal') ?>" class="bottom-nav-item <?= str_contains(uri_string(), 'jurnal') ? 'active' : '' ?>">
+            <i class="bi <?= str_contains(uri_string(), 'jurnal') ? 'bi-journal-check' : 'bi-journal-text' ?>"></i>
+            <span>Jurnal</span>
+        </a>
+        <a href="<?= base_url('rpp') ?>" class="bottom-nav-item <?= str_contains(uri_string(), 'rpp') ? 'active' : '' ?>">
+            <i class="bi <?= str_contains(uri_string(), 'rpp') ? 'bi-folder-fill' : 'bi-folder' ?>"></i>
+            <span>Modul Ajar</span>
+        </a>
+    <?php elseif (session()->get('role') === 'Siswa'): ?>
+        <a href="<?= base_url('jadwal') ?>" class="bottom-nav-item <?= str_contains(uri_string(), 'jadwal') ? 'active' : '' ?>">
+            <i class="bi <?= str_contains(uri_string(), 'jadwal') ? 'bi-calendar-event-fill' : 'bi-calendar-event' ?>"></i>
+            <span>Jadwal</span>
+        </a>
+        <a href="<?= base_url('materi-siswa') ?>" class="bottom-nav-item <?= str_contains(uri_string(), 'materi-siswa') ? 'active' : '' ?>">
+            <i class="bi <?= str_contains(uri_string(), 'materi-siswa') ? 'bi-book-fill' : 'bi-book' ?>"></i>
+            <span>Materi</span>
+        </a>
+        <a href="<?= base_url('ulangan') ?>" class="bottom-nav-item <?= str_contains(uri_string(), 'ulangan') ? 'active' : '' ?>">
+            <i class="bi <?= str_contains(uri_string(), 'ulangan') ? 'bi-pen-fill' : 'bi-pen' ?>"></i>
+            <span>Ujian</span>
+        </a>
+    <?php else: // Admin ?>
+        <a href="<?= base_url('master/kelas') ?>" class="bottom-nav-item <?= str_contains(uri_string(), 'master/kelas') ? 'active' : '' ?>">
+            <i class="bi <?= str_contains(uri_string(), 'master/kelas') ? 'bi-door-open-fill' : 'bi-door-open' ?>"></i>
+            <span>Kelas</span>
+        </a>
+        <a href="<?= base_url('users/guru') ?>" class="bottom-nav-item <?= str_contains(uri_string(), 'users/guru') ? 'active' : '' ?>">
+            <i class="bi <?= str_contains(uri_string(), 'users/guru') ? 'bi-person-badge-fill' : 'bi-person-badge' ?>"></i>
+            <span>Guru</span>
+        </a>
+        <a href="<?= base_url('users/siswa') ?>" class="bottom-nav-item <?= str_contains(uri_string(), 'users/siswa') ? 'active' : '' ?>">
+            <i class="bi <?= str_contains(uri_string(), 'users/siswa') ? 'bi-person-video2' : 'bi-person-video' ?>"></i>
+            <span>Siswa</span>
+        </a>
+    <?php endif; ?>
+
+    <a href="#" class="bottom-nav-item" id="bottomNavMoreBtn">
+        <i class="bi bi-grid"></i>
+        <span>Lainnya</span>
+    </a>
+</nav>
+
+<script>
+    // Handler untuk tombol "Lainnya" di Bottom Nav
+    document.addEventListener('DOMContentLoaded', function() {
+        const bottomNavMoreBtn = document.getElementById('bottomNavMoreBtn');
+        if (bottomNavMoreBtn) {
+            bottomNavMoreBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const sidebarBtn = document.getElementById('sidebarToggle');
+                if (sidebarBtn) sidebarBtn.click(); // Trigger sidebar yang sudah ada
+            });
+        }
+    });
+</script>
+<?php endif; ?>
+
 </body>
 </html>
