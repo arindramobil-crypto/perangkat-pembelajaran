@@ -57,7 +57,7 @@ html, body {
     font-family: 'Inter', system-ui, sans-serif;
     background: var(--bg);
     color: var(--text);
-    overflow: hidden;
+    overflow-y: auto;
 }
 
 /* ══════════════════════════════════════════════════════════
@@ -192,7 +192,7 @@ html, body {
     color: var(--muted);
     line-height: 1.7;
     max-width: 460px;
-    margin-bottom: 3rem;
+    margin-bottom: 1.5rem;
 }
 
 /* Fitur cards */
@@ -206,11 +206,11 @@ html, body {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 12px;
+    gap: 8px;
     background: rgba(255,255,255,0.03);
     border: 1px solid rgba(255,255,255,0.06);
     border-radius: 12px;
-    padding: 16px 20px;
+    padding: 12px 16px;
     backdrop-filter: blur(8px);
     transition: background 0.3s, border-color 0.3s, transform 0.3s;
     animation: fadeUp 0.6s ease both;
