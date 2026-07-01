@@ -68,7 +68,7 @@
 
 <!-- ══ Modal Tambah Guru ══ -->
 <div class="modal fade" id="modalTambah" tabindex="-1">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title"><i class="bi bi-person-plus me-2"></i>Tambah Akun Guru</h5>
@@ -133,7 +133,7 @@
 
 <!-- ══ Modal Edit Guru ══ -->
 <div class="modal fade" id="modalEdit" tabindex="-1">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title"><i class="bi bi-pencil-square me-2"></i>Edit Data Guru</h5>

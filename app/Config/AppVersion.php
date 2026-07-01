@@ -10,5 +10,5 @@ class AppVersion extends BaseConfig
      * Waktu terakhir aplikasi diperbarui.
      * Harus diperbarui oleh Agent setiap kali ada perubahan kode.
      */
-    public $lastUpdated = '01 Juli 2026, 18:16 WIB';
+    public $lastUpdated = '01 Juli 2026, 18:29 WIB';
 }
