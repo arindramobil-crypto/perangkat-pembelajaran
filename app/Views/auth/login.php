@@ -670,7 +670,7 @@ html, body {
             </div>
 
             <div class="login-footer">
-                &copy; <?= date('Y') ?> LMS SMK Perangkat Pembelajaran &mdash; Powered by CodeIgniter 4
+                &copy; <?= date('Y') ?> LMS SMK Perangkat Pembelajaran &mdash; Powered by <?= esc($_namaSekolah) ?>
             </div>
 
         </div>
