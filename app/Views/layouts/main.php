@@ -69,7 +69,7 @@ $_logoUrl     = $_logoFile ? base_url('uploads/logo/' . $_logoFile) : null;
         <?php else: ?>
         <span style="font-size:1.3rem;">📚</span>
         <?php endif; ?>
-        <span class="lms-brand-text">
+        <span class="lms-brand-text d-none d-md-inline">
             <?= esc($_singkatan) ?>
         </span>
     </a>
