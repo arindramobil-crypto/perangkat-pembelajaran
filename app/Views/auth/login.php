@@ -587,6 +587,15 @@ html, body {
                     <span>Pantau perkembangan akademik secara real-time</span>
                 </div>
             </div>
+            <div class="feature-item">
+                <div class="feature-icon" style="background:rgba(236,72,153,0.12);">
+                    <i class="bi bi-file-earmark-richtext" style="color:#EC4899;"></i>
+                </div>
+                <div class="feature-text">
+                    <strong>Modul Ajar & Perangkat Guru</strong>
+                    <span>Buat RPP digital dan kelola jurnal mengajar harian</span>
+                </div>
+            </div>
         </div>
     </div>
 
