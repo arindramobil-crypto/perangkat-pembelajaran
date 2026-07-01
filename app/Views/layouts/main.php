@@ -645,5 +645,8 @@ setInterval(pollNotifUnread, 60000);
 </script>
 <?php endif; ?>
 
+<!-- Extra modals dari child view -->
+<?= $this->renderSection('modals') ?>
+
 </body>
 </html>
