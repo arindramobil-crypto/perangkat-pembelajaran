@@ -8,9 +8,14 @@
             <h3 class="card-title mb-1">Data Guru</h3>
             <p class="text-lms-muted small mb-0">Kelola akun dan profil seluruh guru.</p>
         </div>
-        <button class="btn btn-primary d-flex align-items-center gap-2" onclick="bukaModal()">
-            <i class="bi bi-person-plus-fill"></i> Tambah Guru
-        </button>
+        <div class="d-flex gap-2">
+            <button class="btn btn-success d-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#modalImport">
+                <i class="bi bi-file-earmark-spreadsheet"></i> Upload Masal
+            </button>
+            <button class="btn btn-primary d-flex align-items-center gap-2" onclick="bukaModal()">
+                <i class="bi bi-person-plus-fill"></i> Tambah Guru
+            </button>
+        </div>
     </div>
 </div>
 
@@ -69,6 +74,33 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('modals') ?>
+
+<!-- ══ Modal Import Guru ══ -->
+<div class="modal fade" id="modalImport" tabindex="-1">
+    <div class="modal-dialog">
+        <form action="<?= base_url('users/guru/import') ?>" method="post" enctype="multipart/form-data" class="modal-content">
+            <?= csrf_field() ?>
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="bi bi-file-earmark-spreadsheet me-2"></i>Upload Masal Guru</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert lms-alert-info mb-3 py-2">
+                    <i class="bi bi-info-circle me-2"></i>Pastikan file berformat <strong>.csv</strong>. 
+                    <a href="<?= base_url('templates/Format_Guru.csv') ?>" class="alert-link" download>Download Format CSV</a>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Pilih File CSV</label>
+                    <input class="form-control" type="file" name="file_csv" accept=".csv" required>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
+                <button type="submit" class="btn btn-success"><i class="bi bi-upload me-1"></i>Upload</button>
+            </div>
+        </form>
+    </div>
+</div>
 
 <!-- ══ Modal Tambah Guru ══ -->
 <div class="modal fade" id="modalTambah" tabindex="-1">

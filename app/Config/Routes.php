@@ -36,11 +36,13 @@ $routes->group('master', ['filter' => 'adminGuard'], static function ($routes) {
 $routes->group('users', ['filter' => 'adminGuard'], static function ($routes) {
     $routes->get('guru',                   'Users::guru');
     $routes->post('guru',                  'Users::save_guru');          // tambah
+    $routes->post('guru/import',           'Users::import_guru');        // import masal
     $routes->post('guru/update',           'Users::save_guru');          // edit (user_id diisi)
     $routes->get('guru/delete/(:num)',     'Users::delete_guru/$1');
 
     $routes->get('siswa',                  'Users::siswa');
     $routes->post('siswa',                 'Users::save_siswa');         // tambah
+    $routes->post('siswa/import',          'Users::import_siswa');       // import masal
     $routes->post('siswa/update',          'Users::save_siswa');         // edit
     $routes->get('siswa/delete/(:num)',    'Users::delete_siswa/$1');
 });

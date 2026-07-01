@@ -121,6 +121,69 @@ class Users extends BaseController
         return redirect()->to('/users/guru')->with('success', 'Data Guru berhasil dihapus.');
     }
 
+    public function import_guru()
+    {
+        $file = $this->request->getFile('file_csv');
+        if (!$file || !$file->isValid() || $file->getExtension() !== 'csv') {
+            return redirect()->to('/users/guru')->with('error', 'File tidak valid. Pastikan Anda mengunggah file .csv.');
+        }
+
+        $userModel = new UserModel();
+        $guruModel = new GuruModel();
+        $db = \Config\Database::connect();
+        $db->transStart();
+
+        $inserted = 0;
+        $skipped = 0;
+
+        if (($handle = fopen($file->getTempName(), 'r')) !== false) {
+            $header = fgetcsv($handle, 1000, ',');
+            while (($data = fgetcsv($handle, 1000, ',')) !== false) {
+                if (count($data) < 9) continue; // Format: Username,NIP,Nama Lengkap,Email,No Telepon,Jenis Kelamin,Tempat Lahir,Tanggal Lahir,Alamat
+                
+                $username = trim($data[0]);
+                if (empty($username)) continue;
+
+                // Check duplicate
+                if ($userModel->where('username', $username)->first()) {
+                    $skipped++;
+                    continue;
+                }
+
+                $userModel->insert([
+                    'username'     => $username,
+                    'password'     => password_hash('guru123', PASSWORD_DEFAULT),
+                    'nama_lengkap' => trim($data[2]),
+                    'email'        => trim($data[3]),
+                    'role'         => 'Guru'
+                ]);
+                $user_id = $userModel->insertID();
+
+                $guruModel->insert([
+                    'user_id'       => $user_id,
+                    'nip'           => trim($data[1]),
+                    'no_telp'       => trim($data[4]),
+                    'jenis_kelamin' => strtoupper(trim($data[5])) === 'P' ? 'P' : 'L',
+                    'tempat_lahir'  => trim($data[6]),
+                    'tanggal_lahir' => trim($data[7]) ? date('Y-m-d', strtotime(trim($data[7]))) : null,
+                    'alamat'        => trim($data[8]),
+                ]);
+                $inserted++;
+            }
+            fclose($handle);
+        }
+
+        $db->transComplete();
+        if ($db->transStatus() === false) {
+            return redirect()->to('/users/guru')->with('error', 'Terjadi kesalahan saat menyimpan data.');
+        }
+
+        $msg = "Berhasil mengimpor $inserted data guru.";
+        if ($skipped > 0) $msg .= " ($skipped data dilewati karena Username sudah ada).";
+        
+        return redirect()->to('/users/guru')->with('success', $msg);
+    }
+
     // ══════════════════════════════════════════════
     // DATA SISWA
     // ══════════════════════════════════════════════
@@ -245,6 +308,72 @@ class Users extends BaseController
         }
         return redirect()->to('/users/siswa')->with('success', 'Data Siswa berhasil dihapus.');
     }
+
+    public function import_siswa()
+    {
+        $file = $this->request->getFile('file_csv');
+        if (!$file || !$file->isValid() || $file->getExtension() !== 'csv') {
+            return redirect()->to('/users/siswa')->with('error', 'File tidak valid. Pastikan Anda mengunggah file .csv.');
+        }
+
+        $userModel  = new UserModel();
+        $siswaModel = new SiswaModel();
+        $db = \Config\Database::connect();
+        $db->transStart();
+
+        $inserted = 0;
+        $skipped = 0;
+
+        if (($handle = fopen($file->getTempName(), 'r')) !== false) {
+            $header = fgetcsv($handle, 1000, ',');
+            while (($data = fgetcsv($handle, 1000, ',')) !== false) {
+                if (count($data) < 10) continue; // Format: Username,NIS,NISN,Nama Lengkap,Email,Jenis Kelamin,Tempat Lahir,Tanggal Lahir,No Telepon,Alamat
+                
+                $username = trim($data[0]);
+                if (empty($username)) continue;
+
+                // Check duplicate username or NIS
+                $nis = trim($data[1]);
+                if ($userModel->where('username', $username)->first() || $siswaModel->where('nis', $nis)->first()) {
+                    $skipped++;
+                    continue;
+                }
+
+                $userModel->insert([
+                    'username'     => $username,
+                    'password'     => password_hash('siswa123', PASSWORD_DEFAULT),
+                    'nama_lengkap' => trim($data[3]),
+                    'email'        => trim($data[4]),
+                    'role'         => 'Siswa'
+                ]);
+                $user_id = $userModel->insertID();
+
+                $siswaModel->insert([
+                    'user_id'       => $user_id,
+                    'nis'           => $nis,
+                    'nisn'          => trim($data[2]),
+                    'jenis_kelamin' => strtoupper(trim($data[5])) === 'P' ? 'P' : 'L',
+                    'tempat_lahir'  => trim($data[6]),
+                    'tanggal_lahir' => trim($data[7]) ? date('Y-m-d', strtotime(trim($data[7]))) : null,
+                    'no_telp'       => trim($data[8]),
+                    'alamat'        => trim($data[9]),
+                ]);
+                $inserted++;
+            }
+            fclose($handle);
+        }
+
+        $db->transComplete();
+        if ($db->transStatus() === false) {
+            return redirect()->to('/users/siswa')->with('error', 'Terjadi kesalahan saat menyimpan data.');
+        }
+
+        $msg = "Berhasil mengimpor $inserted data siswa.";
+        if ($skipped > 0) $msg .= " ($skipped data dilewati karena Username/NIS sudah ada).";
+        
+        return redirect()->to('/users/siswa')->with('success', $msg);
+    }
+
 
     // ══════════════════════════════════════════════
     // PROFIL — Semua role bisa akses
