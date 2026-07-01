@@ -620,22 +620,7 @@ html, body {
             </div>
             <?php endif; ?>
 
-            <!-- Tab Role (hanya dekoratif, untuk UX visual) -->
-            <div class="role-tabs" id="roleTabs">
-                <div class="role-tab active" onclick="selectRole('Admin', this)">
-                    <span class="ri">🛡️</span>
-                    <span>Admin</span>
-                </div>
-                <div class="role-tab" onclick="selectRole('Guru', this)">
-                    <span class="ri">👨‍🏫</span>
-                    <span>Guru</span>
-                </div>
-                <div class="role-tab" onclick="selectRole('Siswa', this)">
-                    <span class="ri">🎓</span>
-                    <span>Siswa</span>
-                </div>
-            </div>
-
+            <!-- Tab Role removed by request -->
             <!-- Form -->
             <form action="<?= base_url('login') ?>" method="post" id="loginForm">
                 <?= csrf_field() ?>
