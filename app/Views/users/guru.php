@@ -73,14 +73,13 @@
 <!-- ══ Modal Tambah Guru ══ -->
 <div class="modal fade" id="modalTambah" tabindex="-1">
     <div class="modal-dialog modal-lg modal-dialog-scrollable">
-        <div class="modal-content">
+        <form action="<?= base_url('users/guru') ?>" method="post" class="modal-content">
+            <?= csrf_field() ?>
             <div class="modal-header">
                 <h5 class="modal-title"><i class="bi bi-person-plus me-2"></i>Tambah Akun Guru</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
-            <form action="<?= base_url('users/guru') ?>" method="post">
-                <?= csrf_field() ?>
-                <div class="modal-body">
+            <div class="modal-body">
                     <div class="alert lms-alert-success mb-3 py-2">
                         <i class="bi bi-key me-2"></i>Password default guru baru: <strong>guru123</strong>
                     </div>
@@ -130,23 +129,22 @@
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
                     <button type="submit" class="btn btn-primary"><i class="bi bi-save me-1"></i>Simpan</button>
                 </div>
-            </form>
-        </div>
+            </div>
+        </form>
     </div>
 </div>
 
 <!-- ══ Modal Edit Guru ══ -->
 <div class="modal fade" id="modalEdit" tabindex="-1">
     <div class="modal-dialog modal-lg modal-dialog-scrollable">
-        <div class="modal-content">
+        <form action="<?= base_url('users/guru/update') ?>" method="post" class="modal-content">
+            <?= csrf_field() ?>
+            <input type="hidden" name="user_id" id="edit_guru_id">
             <div class="modal-header">
                 <h5 class="modal-title"><i class="bi bi-pencil-square me-2"></i>Edit Data Guru</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
-            <form action="<?= base_url('users/guru/update') ?>" method="post">
-                <?= csrf_field() ?>
-                <input type="hidden" name="user_id" id="edit_guru_id">
-                <div class="modal-body">
+            <div class="modal-body">
                     <div class="row g-3">
                         <div class="col-md-6">
                             <label class="form-label">Username <span class="text-danger">*</span></label>
@@ -201,8 +199,8 @@
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
                     <button type="submit" class="btn btn-warning text-dark"><i class="bi bi-save me-1"></i>Simpan Perubahan</button>
                 </div>
-            </form>
-        </div>
+            </div>
+        </form>
     </div>
 </div>
 
