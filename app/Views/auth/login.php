@@ -1,11 +1,29 @@
+<?php
+// Ambil pengaturan sekolah
+$_sekolah = [];
+try {
+    $_sekolah = (new \App\Models\PengaturanSekolahModel())->getPengaturan();
+} catch (\Throwable $e) {}
+$_namaSekolah = $_sekolah['nama_sekolah'] ?? 'LMS SMK';
+$_logoFile    = $_sekolah['logo']        ?? null;
+$_logoUrl     = $_logoFile ? base_url('uploads/logo/' . $_logoFile) : null;
+?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= $title ?? 'Login' ?> — LMS SMK</title>
-    <meta name="description" content="Sistem Perangkat Pembelajaran SMK — Login">
+    <title><?= $title ?? 'Login' ?> — <?= esc($_namaSekolah) ?></title>
+    <meta name="description" content="Sistem Perangkat Pembelajaran <?= esc($_namaSekolah) ?> — Login">
     <meta name="robots" content="noindex, nofollow">
+
+    <!-- Favicon -->
+    <?php if ($_logoUrl): ?>
+    <link rel="icon" href="<?= $_logoUrl ?>">
+    <link rel="apple-touch-icon" href="<?= $_logoUrl ?>">
+    <?php else: ?>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📚</text></svg>">
+    <?php endif; ?>
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
