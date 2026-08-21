@@ -52,7 +52,7 @@ class MasterData extends BaseController
 
         if ($tahun['status'] === 'Tidak Aktif') {
             // Nonaktifkan semua dulu (hanya boleh 1 yang aktif)
-            $model->set('status', 'Tidak Aktif')->update();
+            $model->where('status', 'Aktif')->set('status', 'Tidak Aktif')->update();
             // Aktifkan yang dipilih
             $model->update($id, ['status' => 'Aktif']);
             $msg = "Tahun pelajaran {$tahun['tahun']} ({$tahun['semester']}) sekarang Aktif.";
