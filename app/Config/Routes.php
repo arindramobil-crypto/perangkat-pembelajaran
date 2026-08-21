@@ -177,3 +177,8 @@ $routes->group('export', ['filter' => 'authGuard'], static function ($routes) {
 // ── Validasi Dokumen (Publik) ──────────────────────────────────────
 $routes->get('validasi/dokumen/(:segment)', 'Validasi::dokumen/$1');
 
+
+// AI Assistant Pembuat RPP / Materi
+$routes->get('ai-assistant', 'AiAssistant::index', ['filter' => 'authGuard']);
+$routes->post('ai-assistant/generate', 'AiAssistant::generate', ['filter' => 'authGuard']);
+

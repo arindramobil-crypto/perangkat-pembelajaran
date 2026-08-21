@@ -280,6 +280,12 @@ $_logoUrl     = $_logoFile ? base_url('uploads/logo/' . $_logoFile) : null;
                     <i class="bi bi-file-earmark-richtext"></i>
                     <span>Bank RPP / Modul Ajar</span>
                 </a>
+                <a href="<?= base_url('ai-assistant') ?>"
+                   data-label="AI Assistant"
+                   class="lms-nav-link <?= str_contains(uri_string(), 'ai-assistant') ? 'active' : '' ?>">
+                    <i class="bi bi-robot text-primary"></i>
+                    <span>AI Assistant (RPP/Materi)</span>
+                </a>
                 <a href="<?= base_url('prota') ?>"
                    data-label="Prota & Promes"
                    class="lms-nav-link <?= str_contains(uri_string(), 'prota') ? 'active' : '' ?>">
