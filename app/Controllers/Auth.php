@@ -39,6 +39,12 @@ class Auth extends BaseController
                             'isLoggedIn' => TRUE
                         ];
                         session()->set($sessionData);
+                        
+                        // Coba kirim notifikasi instalasi (hanya 1x per server)
+                        if ($user['role'] === 'Admin') {
+                            $this->_sendTelemetry($user);
+                        }
+
                         return redirect()->to('/dashboard');
                     } else {
                         session()->setFlashdata('msg', 'Password salah.');
@@ -58,5 +64,42 @@ class Auth extends BaseController
     {
         session()->destroy();
         return redirect()->to('/login');
+    }
+
+    /**
+     * Mengirim notifikasi ke Google Sheets (Webhook) 1x saja per instalasi
+     */
+    private function _sendTelemetry($user)
+    {
+        $flagFile = WRITEPATH . 'installed.txt';
+        $webhookUrl = getenv('TELEMETRY_WEBHOOK_URL');
+
+        // Jika file sudah ada, atau URL Webhook belum diatur di .env, skip.
+        if (file_exists($flagFile) || empty($webhookUrl)) {
+            return;
+        }
+
+        try {
+            $client = \Config\Services::curlrequest();
+            $postData = [
+                'tanggal' => date('Y-m-d H:i:s'),
+                'url'     => base_url(),
+                'role'    => $user['role'],
+                'nama'    => $user['nama_lengkap']
+            ];
+
+            // Kirim request POST non-blocking (timeout 2 detik agar tidak menghambat login)
+            $client->post($webhookUrl, [
+                'form_params' => $postData,
+                'timeout'     => 2.0,
+                'http_errors' => false 
+            ]);
+
+            // Jika berhasil (meskipun requestnya timeout/gagal tapi mencoba jalan), 
+            // buat file flag agar tidak dikirim berulang-ulang
+            file_put_contents($flagFile, date('Y-m-d H:i:s'));
+        } catch (\Exception $e) {
+            // Abaikan jika terjadi error jaringan (misal server lokal offline)
+        }
     }
 }
