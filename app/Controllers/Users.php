@@ -241,8 +241,9 @@ class Users extends BaseController
             if ($db->transStatus() === false) {
                 return redirect()->to('/users/siswa')->with('error', 'Gagal menyimpan data.');
             }
+            $btnKeKelas = "<br><a href='" . base_url('master/anggota-kelas') . "' class='btn btn-sm mt-2' style='background:rgba(255,255,255,0.2);color:white;border:1px solid rgba(255,255,255,0.4);'><i class='bi bi-box-arrow-in-right me-1'></i> Langsung Masukkan ke Kelas</a>";
             return redirect()->to('/users/siswa')
-                ->with('success', "Siswa '{$username}' berhasil ditambahkan. Password default: siswa123");
+                ->with('success', "Siswa '{$username}' berhasil ditambahkan. Password default: siswa123" . $btnKeKelas);
 
         } else {
             // ── EDIT ────────────────────────────
