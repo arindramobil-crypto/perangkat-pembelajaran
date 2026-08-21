@@ -246,3 +246,35 @@ CREATE TABLE IF NOT EXISTS `nilai` (
   CONSTRAINT `fk_nilai_tahun` FOREIGN KEY (`tahun_pelajaran_id`) REFERENCES `tahun_pelajaran` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_nilai_input` FOREIGN KEY (`input_oleh`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE
 ) ENGINE=InnoDB;
+
+-- 19. Tabel Jurnal Mengajar
+CREATE TABLE IF NOT EXISTS `jurnal_mengajar` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `guru_id` INT NOT NULL,
+  `jadwal_id` INT NOT NULL,
+  `tanggal` DATE NOT NULL,
+  `jam_ke` VARCHAR(50) DEFAULT NULL,
+  `materi_pembahasan` TEXT DEFAULT NULL,
+  `catatan_kejadian` TEXT DEFAULT NULL,
+  `siswa_absen` TEXT DEFAULT NULL,
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  CONSTRAINT `fk_jurnal_guru` FOREIGN KEY (`guru_id`) REFERENCES `gurus` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_jurnal_jadwal` FOREIGN KEY (`jadwal_id`) REFERENCES `jadwal` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB;
+
+-- 20. Tabel RPP Digital
+CREATE TABLE IF NOT EXISTS `rpp_digital` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `guru_id` INT NOT NULL,
+  `mapel_id` INT NOT NULL,
+  `kelas_id` INT NOT NULL,
+  `judul` VARCHAR(255) NOT NULL,
+  `konten` TEXT DEFAULT NULL,
+  `file_path` VARCHAR(255) DEFAULT NULL,
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  CONSTRAINT `fk_rpp_guru` FOREIGN KEY (`guru_id`) REFERENCES `gurus` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_rpp_mapel` FOREIGN KEY (`mapel_id`) REFERENCES `mata_pelajaran` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_rpp_kelas` FOREIGN KEY (`kelas_id`) REFERENCES `kelas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB;
