@@ -55,12 +55,11 @@ class Dashboard extends BaseController
             ORDER BY k.nama_kelas
         ")->getResultArray();
 
-        // Materi per mapel — join via jadwal (sesuai struktur MateriModel)
+        // Materi per mapel (sesuai struktur tabel materi)
         $materiPerMapel = $db->query("
             SELECT mp.nama_mapel, COUNT(m.id) as total
             FROM mata_pelajaran mp
-            LEFT JOIN jadwal j ON j.mapel_id = mp.id
-            LEFT JOIN materi m ON m.jadwal_id = j.id
+            LEFT JOIN materi m ON m.mapel_id = mp.id
             GROUP BY mp.id, mp.nama_mapel
             HAVING total > 0
             ORDER BY total DESC
@@ -76,7 +75,7 @@ class Dashboard extends BaseController
 
         // Aktivitas terbaru (materi + ulangan)
         $aktivitas = $db->query("
-            SELECT 'Materi' as tipe, judul_materi as judul, created_at FROM materi
+            SELECT 'Materi' as tipe, judul, created_at FROM materi
             UNION ALL
             SELECT 'Ujian', judul, created_at FROM ulangan
             ORDER BY created_at DESC LIMIT 8
@@ -155,13 +154,12 @@ class Dashboard extends BaseController
             GROUP BY s.tipe_soal
         ")->getResultArray();
 
-        // Materi terbaru yang diupload guru ini — join via jadwal
+        // Materi terbaru yang diupload guru ini
         $materiTerbaru = $db->query("
-            SELECT m.judul_materi, m.created_at,
+            SELECT m.judul, m.created_at,
                    COALESCE(mp.nama_mapel, '-') as nama_mapel
             FROM materi m
-            LEFT JOIN jadwal j ON j.id = m.jadwal_id
-            LEFT JOIN mata_pelajaran mp ON mp.id = j.mapel_id
+            LEFT JOIN mata_pelajaran mp ON mp.id = m.mapel_id
             WHERE m.guru_id = {$guruId}
             ORDER BY m.created_at DESC LIMIT 5
         ")->getResultArray();
@@ -224,11 +222,10 @@ class Dashboard extends BaseController
         $totalPd  = $hadir + $sakit + $izin + $alfa;
         $pctHadir = $totalPd > 0 ? round(($hadir / $totalPd) * 100) : 0;
 
-        // Total materi untuk kelas ini (via jadwal)
+        // Total materi untuk kelas ini (via materi_kelas)
         $totalMateri = (int)($db->query("
-            SELECT COUNT(m.id) as c FROM materi m
-            JOIN jadwal j ON j.id = m.jadwal_id
-            WHERE j.kelas_id = {$kelasId}
+            SELECT COUNT(mk.id) as c FROM materi_kelas mk
+            WHERE mk.kelas_id = {$kelasId}
         ")->getRowArray()['c'] ?? 0);
 
         // Ujian belum dikerjakan
@@ -279,14 +276,14 @@ class Dashboard extends BaseController
             ORDER BY u.id DESC LIMIT 5
         ")->getResultArray();
 
-        // Materi terbaru untuk kelas ini (via jadwal)
+        // Materi terbaru untuk kelas ini (via materi_kelas)
         $materiTerbaru = $db->query("
-            SELECT m.judul_materi, m.created_at,
+            SELECT m.judul, m.created_at,
                    COALESCE(mp.nama_mapel, '-') as nama_mapel, m.id
-            FROM materi m
-            JOIN jadwal j ON j.id = m.jadwal_id
-            LEFT JOIN mata_pelajaran mp ON mp.id = j.mapel_id
-            WHERE j.kelas_id = {$kelasId}
+            FROM materi_kelas mk
+            JOIN materi m ON m.id = mk.materi_id
+            LEFT JOIN mata_pelajaran mp ON mp.id = m.mapel_id
+            WHERE mk.kelas_id = {$kelasId}
             ORDER BY m.created_at DESC LIMIT 5
         ")->getResultArray();
 

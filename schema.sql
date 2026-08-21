@@ -6,8 +6,8 @@
 -- DBMS: MySQL / MariaDB (InnoDB Engine)
 -- =====================================================================
 
-CREATE DATABASE IF NOT EXISTS `perangkat_pembelajaran` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE `perangkat_pembelajaran`;
+-- CREATE DATABASE IF NOT EXISTS `perangkat_pembelajaran` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+-- USE `perangkat_pembelajaran`;
 
 -- 1. Tabel Tahun Pelajaran
 CREATE TABLE IF NOT EXISTS `tahun_pelajaran` (
