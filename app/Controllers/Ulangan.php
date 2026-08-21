@@ -193,7 +193,7 @@ class Ulangan extends BaseController
         $db = \Config\Database::connect();
         $ulangan = $db->table('ulangan')->where('id', $ulangan_id)->get()->getRowArray();
         $siswas = $db->table('anggota_kelas')
-            ->select('siswas.user_id')
+            ->select('siswas.user_id, siswas.no_telp')
             ->join('siswas', 'siswas.id = anggota_kelas.siswa_id')
             ->where('anggota_kelas.kelas_id', $kelas_id)
             ->get()->getResultArray();
@@ -203,6 +203,15 @@ class Ulangan extends BaseController
             $notif = new NotifikasiModel();
             $pesan = "Ujian baru '{$ulangan['judul']}' telah ditugaskan ke kelas Anda.";
             $notif->kirimBulk($userIds, 'ujian', '📝 Ujian Baru', $pesan, base_url('ulangan'));
+
+            // Kirim notifikasi WhatsApp
+            helper('wa');
+            foreach ($siswas as $s) {
+                if (!empty($s['no_telp'])) {
+                    $pesanWa = "Halo! " . $pesan . "\n\nSilakan cek di sistem Perangkat Pembelajaran.";
+                    send_wa($s['no_telp'], $pesanWa);
+                }
+            }
         }
         
         return redirect()->to('/ulangan/soal/'.$ulangan_id)->with('success', 'Ulangan ditugaskan ke kelas.');
@@ -325,6 +334,38 @@ class Ulangan extends BaseController
             'nilai_akhir' => $status_penilaian == 'Selesai' ? $nilai_akhir : 0, 
             'status_penilaian' => $status_penilaian
         ]);
+        
+        // === LOGIKA GAMIFIKASI & BADGES ===
+        if ($status_penilaian == 'Selesai') {
+            $siswaModel = new SiswaModel();
+            $dataSiswa = $siswaModel->find($attempt['siswa_id']);
+            if ($dataSiswa) {
+                $poinBaru = $dataSiswa['poin'] + round($nilai_akhir);
+                
+                $badges = json_decode($dataSiswa['badges'] ?? '[]', true) ?: [];
+                
+                // Cek Badge 1: Perfect Score
+                if (round($nilai_akhir) == 100 && !in_array('Perfect Score', $badges)) {
+                    $badges[] = 'Perfect Score';
+                }
+                
+                // Cek Badge 2: Rajin (> 500 Poin)
+                if ($poinBaru > 500 && !in_array('Rajin', $badges)) {
+                    $badges[] = 'Rajin';
+                }
+
+                // Cek Badge 3: Elite Scholar (> 1000 Poin)
+                if ($poinBaru > 1000 && !in_array('Elite Scholar', $badges)) {
+                    $badges[] = 'Elite Scholar';
+                }
+
+                $siswaModel->update($attempt['siswa_id'], [
+                    'poin' => $poinBaru,
+                    'badges' => json_encode($badges)
+                ]);
+            }
+        }
+        // ==================================
         
         // Kirim Notifikasi ke Guru
         $db = \Config\Database::connect();

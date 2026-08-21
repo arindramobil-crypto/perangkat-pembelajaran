@@ -45,10 +45,19 @@
 
     <!-- KOP SURAT -->
     <div class="kop-surat">
-        <div class="kop-teks">
+        <div class="kop-logo" style="width: 100px;">
+            <!-- Tempat logo sekolah (opsional) -->
+        </div>
+        <div class="kop-teks" style="flex: 1;">
             <h1>PEMERINTAH PROVINSI <?= strtoupper(esc($sekolah['provinsi'] ?? 'JAWA TENGAH')) ?></h1>
             <h2><?= esc($sekolah['nama_sekolah'] ?? 'SMK NEGERI 1 CONTOH') ?></h2>
             <p><?= esc($sekolah['alamat'] ?? 'Jl. Pendidikan No. 1, Telp (021) 123456') ?></p>
+        </div>
+        <div class="kop-qr" style="width: 100px; text-align: right;">
+            <?php if(!empty($qr_url)): ?>
+            <img src="<?= $qr_url ?>" alt="QR Validasi" style="width: 80px; height: 80px; border: 1px solid #ddd; padding: 2px;">
+            <div style="font-size: 8px; font-family: monospace; margin-top: 4px; color: #555;">VAL: <?= substr($kode_val, 0, 8) ?></div>
+            <?php endif; ?>
         </div>
     </div>
 

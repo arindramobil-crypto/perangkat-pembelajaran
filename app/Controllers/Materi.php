@@ -57,7 +57,7 @@ class Materi extends BaseController
         
         if ($jadwal) {
             $siswas = $db->table('anggota_kelas')
-                ->select('siswas.user_id')
+                ->select('siswas.user_id, siswas.no_telp')
                 ->join('siswas', 'siswas.id = anggota_kelas.siswa_id')
                 ->where('anggota_kelas.kelas_id', $jadwal['kelas_id'])
                 ->get()->getResultArray();
@@ -67,6 +67,15 @@ class Materi extends BaseController
                 $notif = new NotifikasiModel();
                 $pesan = "Materi baru '{$judulMateri}' untuk mata pelajaran {$jadwal['nama_mapel']} telah ditambahkan.";
                 $notif->kirimBulk($userIds, 'materi', '📚 Materi Baru', $pesan, base_url('materi'));
+
+                // Kirim notifikasi WhatsApp
+                helper('wa');
+                foreach ($siswas as $s) {
+                    if (!empty($s['no_telp'])) {
+                        $pesanWa = "Halo! " . $pesan . "\n\nSilakan cek di sistem Perangkat Pembelajaran.";
+                        send_wa($s['no_telp'], $pesanWa);
+                    }
+                }
             }
         }
     }

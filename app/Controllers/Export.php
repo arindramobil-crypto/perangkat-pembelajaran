@@ -65,13 +65,20 @@ class Export extends BaseController
 
         $jurnal = $builder->orderBy('jurnal_mengajar.tanggal', 'ASC')->findAll();
 
+        // Generate Kode Validasi
+        $kodeValidasi = md5('JURNAL-' . $guru['id'] . '-' . $bulan . '-' . $tahun . '-' . date('Ymd'));
+        $urlValidasi  = base_url('validasi/dokumen/' . $kodeValidasi);
+        $qrUrl        = 'https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=' . urlencode($urlValidasi);
+
         $data = [
             'title'   => 'Cetak Jurnal Mengajar',
             'jurnal'  => $jurnal,
             'guru'    => $guru,
             'sekolah' => $this->getProfilSekolah(),
             'bulan'   => $bulan,
-            'tahun'   => $tahun
+            'tahun'   => $tahun,
+            'qr_url'  => $qrUrl,
+            'kode_val'=> $kodeValidasi
         ];
 
         return view('export/print_jurnal', $data);
@@ -104,6 +111,11 @@ class Export extends BaseController
         $kelasModel = new KelasModel();
         $mapelModel = new MataPelajaranModel();
 
+        // Generate Kode Validasi
+        $kodeValidasi = md5('PROTA-' . $guru['id'] . '-' . $tipe . '-' . $kelas_id . '-' . $mapel_id . '-' . date('Ymd'));
+        $urlValidasi  = base_url('validasi/dokumen/' . $kodeValidasi);
+        $qrUrl        = 'https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=' . urlencode($urlValidasi);
+
         $data = [
             'title'   => 'Cetak ' . $tipe,
             'tipe'    => $tipe,
@@ -111,7 +123,9 @@ class Export extends BaseController
             'guru'    => $guru,
             'sekolah' => $this->getProfilSekolah(),
             'kelas'   => $kelasModel->find($kelas_id),
-            'mapel'   => $mapelModel->find($mapel_id)
+            'mapel'   => $mapelModel->find($mapel_id),
+            'qr_url'  => $qrUrl,
+            'kode_val'=> $kodeValidasi
         ];
 
         return view('export/print_prota', $data);

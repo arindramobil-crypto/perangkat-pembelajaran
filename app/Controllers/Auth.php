@@ -72,7 +72,7 @@ class Auth extends BaseController
     private function _sendTelemetry($user)
     {
         $flagFile = WRITEPATH . 'installed.txt';
-        $webhookUrl = getenv('TELEMETRY_WEBHOOK_URL');
+        $webhookUrl = env('TELEMETRY_WEBHOOK_URL');
 
         // Jika file sudah ada, atau URL Webhook belum diatur di .env, skip.
         if (file_exists($flagFile) || empty($webhookUrl)) {

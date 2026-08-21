@@ -6,7 +6,7 @@ class SiswaModel extends Model
 {
     protected $table = 'siswas';
     protected $primaryKey = 'id';
-    protected $allowedFields = ['user_id', 'nis', 'nisn', 'jenis_kelamin', 'tempat_lahir', 'tanggal_lahir', 'alamat', 'no_telp'];
+    protected $allowedFields = ['user_id', 'nis', 'nisn', 'jenis_kelamin', 'tempat_lahir', 'tanggal_lahir', 'alamat', 'no_telp', 'poin', 'badges'];
     
     public function getSiswas()
     {

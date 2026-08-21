@@ -235,14 +235,14 @@ $greeting = $hour < 11 ? 'Selamat Pagi' : ($hour < 15 ? 'Selamat Siang' : ($hour
     <div class="col-lg-8">
         <div class="chart-card">
             <h5><i class="bi bi-bar-chart-fill" style="color:#818CF8;"></i> Siswa per Kelas</h5>
-            <canvas id="chartSiswaKelas" height="200"></canvas>
+            <div id="chartSiswaKelas"></div>
         </div>
     </div>
     <!-- Materi per Mapel (Doughnut) -->
     <div class="col-lg-4">
         <div class="chart-card">
             <h5><i class="bi bi-pie-chart-fill" style="color:#F59E0B;"></i> Materi per Mapel</h5>
-            <canvas id="chartMateriMapel" height="200"></canvas>
+            <div id="chartMateriMapel"></div>
         </div>
     </div>
 </div>
@@ -350,7 +350,7 @@ $mapelData   = json_encode(array_column($materiPerMapel ?? [], 'total'));
             <?php if (empty($nilaiPerUlangan)): ?>
             <p style="color:var(--lms-text-muted);font-size:0.85rem;margin:0;">Belum ada data nilai ujian.</p>
             <?php else: ?>
-            <canvas id="chartNilaiGuru" height="200"></canvas>
+            <div id="chartNilaiGuru"></div>
             <?php endif; ?>
         </div>
     </div>
@@ -361,7 +361,7 @@ $mapelData   = json_encode(array_column($materiPerMapel ?? [], 'total'));
             <?php if (empty($tipesSoal)): ?>
             <p style="color:var(--lms-text-muted);font-size:0.85rem;margin:0;">Belum ada soal dibuat.</p>
             <?php else: ?>
-            <canvas id="chartTipesSoal" height="200"></canvas>
+            <div id="chartTipesSoal"></div>
             <?php endif; ?>
         </div>
     </div>
@@ -469,6 +469,49 @@ $tipeData    = json_encode(array_column($tipesSoal ?? [], 'total'));
     <?php endif; ?>
 </div>
 
+<?php
+$poinSiswa = $stats['siswa']['poin'] ?? 0;
+$badgesSiswa = json_decode($stats['siswa']['badges'] ?? '[]', true) ?: [];
+?>
+<div class="dash-section">
+    <div class="dash-section-title"><i class="bi bi-star-fill text-warning"></i> Gamifikasi: Poin & Badges</div>
+    <div class="row g-3">
+        <div class="col-md-4">
+            <div class="chart-card d-flex align-items-center gap-3" style="background: linear-gradient(135deg, rgba(245,158,11,0.2) 0%, rgba(245,158,11,0.05) 100%); border:1px solid rgba(245,158,11,0.3); height: 100%;">
+                <div style="font-size: 3rem; color: #F59E0B;"><i class="bi bi-coin"></i></div>
+                <div>
+                    <div style="font-size: 0.8rem; color: var(--lms-text-muted); text-transform: uppercase; font-weight: 600;">Total Poin XP</div>
+                    <div style="font-size: 2rem; font-weight: 800; color: #F59E0B;"><?= number_format($poinSiswa) ?> XP</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="chart-card" style="height: 100%;">
+                <div style="font-size: 0.85rem; color: var(--lms-text-muted); font-weight: 600; margin-bottom: 0.75rem; text-transform: uppercase;">Badges Anda</div>
+                <div class="d-flex flex-wrap gap-2">
+                    <?php if (empty($badgesSiswa)): ?>
+                        <span style="color: var(--lms-text-muted); font-size: 0.85rem;">Belum ada badge yang diperoleh. Kerjakan ujian untuk mendapatkannya!</span>
+                    <?php else: ?>
+                        <?php foreach($badgesSiswa as $badge): ?>
+                            <?php
+                                $badgeIcon = 'bi-award-fill';
+                                $badgeColor = '#38BDF8';
+                                if ($badge === 'Perfect Score') { $badgeIcon = 'bi-star-fill'; $badgeColor = '#F59E0B'; }
+                                elseif ($badge === 'Rajin') { $badgeIcon = 'bi-lightning-charge-fill'; $badgeColor = '#22C55E'; }
+                                elseif ($badge === 'Elite Scholar') { $badgeIcon = 'bi-trophy-fill'; $badgeColor = '#818CF8'; }
+                            ?>
+                            <div style="display:inline-flex; align-items:center; gap:6px; padding:6px 14px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 50px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                                <i class="bi <?= $badgeIcon ?>" style="color: <?= $badgeColor ?>; font-size: 1.1rem;"></i>
+                                <span style="font-size: 0.85rem; font-weight: 600; color: white;"><?= esc($badge) ?></span>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="dash-section">
     <div class="dash-section-title"><i class="bi bi-grid-1x2"></i> Ringkasan Akademik</div>
     <div class="row g-3">
@@ -507,7 +550,7 @@ $tipeData    = json_encode(array_column($tipesSoal ?? [], 'total'));
             <?php if (empty($nilaiSiswa)): ?>
             <p style="color:var(--lms-text-muted);font-size:0.85rem;">Belum ada ujian yang diselesaikan.</p>
             <?php else: ?>
-            <canvas id="chartNilaiSiswa" height="200"></canvas>
+            <div id="chartNilaiSiswa"></div>
             <?php endif; ?>
         </div>
     </div>
@@ -517,8 +560,8 @@ $tipeData    = json_encode(array_column($tipesSoal ?? [], 'total'));
             <h5><i class="bi bi-pie-chart-fill" style="color:#22C55E;"></i> Rekap Kehadiran</h5>
             <div style="display:flex;align-items:center;justify-content:center;gap:1.5rem;flex-wrap:wrap;">
                 <div style="position:relative;width:160px;height:160px;">
-                    <canvas id="chartKehadiran"></canvas>
-                    <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+                    <div id="chartKehadiran" style="margin-top:-20px;margin-left:-20px;"></div>
+                    <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;">
                         <div style="font-size:1.6rem;font-weight:800;color:<?= $pctColor ?>;"><?= $pct ?>%</div>
                         <div style="font-size:0.7rem;color:var(--lms-text-muted);">Kehadiran</div>
                     </div>
@@ -606,90 +649,78 @@ $tipeData    = json_encode(array_column($tipesSoal ?? [], 'total'));
 <?= $this->endSection() ?>
 
 <?= $this->section('scripts') ?>
-<!-- Chart.js -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<!-- Tidak butuh CDN Chart.js di sini karena ApexCharts sudah di-load di main.php -->
 <script>
-Chart.defaults.color = '#94A3B8';
-Chart.defaults.font.family = "'Inter', sans-serif";
-Chart.defaults.font.size = 11;
-
-const gridColor  = 'rgba(255,255,255,0.06)';
+const isDarkMode = document.documentElement.getAttribute('data-theme') === 'dark';
+const textColor  = isDarkMode ? '#e2e8f0' : '#475569';
+const gridColor  = isDarkMode ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)';
 const palette    = ['#818CF8','#22C55E','#F59E0B','#38BDF8','#A78BFA','#FB923C','#34D399','#F472B6'];
+
+// Global apex option
+const commonOptions = {
+    chart: { 
+        fontFamily: "'Inter', sans-serif", 
+        toolbar: { show: false },
+        background: 'transparent',
+        foreColor: textColor
+    },
+    grid: { borderColor: gridColor, strokeDashArray: 4 },
+    dataLabels: { enabled: false },
+    theme: { mode: isDarkMode ? 'dark' : 'light' },
+    tooltip: { theme: isDarkMode ? 'dark' : 'light' }
+};
 
 <?php if ($role === 'Admin'): ?>
 /* ── Siswa per Kelas ─────────────── */
-new Chart(document.getElementById('chartSiswaKelas'), {
-    type: 'bar',
-    data: {
-        labels: <?= $kelasLabels ?? '[]' ?>,
-        datasets: [{
-            label: 'Jumlah Siswa',
-            data: <?= $kelasData ?? '[]' ?>,
-            backgroundColor: 'rgba(129,140,248,0.7)',
-            borderColor: '#818CF8',
-            borderWidth: 1.5,
-            borderRadius: 6,
-        }]
-    },
-    options: {
-        responsive: true, maintainAspectRatio: true,
-        plugins: { legend: { display: false } },
-        scales: {
-            y: { grid: { color: gridColor }, ticks: { stepSize: 1 } },
-            x: { grid: { display: false } }
-        }
-    }
-});
+new ApexCharts(document.getElementById('chartSiswaKelas'), {
+    ...commonOptions,
+    chart: { ...commonOptions.chart, type: 'bar', height: 280 },
+    series: [{ name: 'Jumlah Siswa', data: <?= $kelasData ?? '[]' ?> }],
+    xaxis: { categories: <?= $kelasLabels ?? '[]' ?> },
+    colors: ['#818CF8'],
+    plotOptions: { bar: { borderRadius: 6, columnWidth: '45%' } }
+}).render();
 
 /* ── Materi per Mapel ─────────────── */
-new Chart(document.getElementById('chartMateriMapel'), {
-    type: 'doughnut',
-    data: {
-        labels: <?= $mapelLabels ?? '[]' ?>,
-        datasets: [{ data: <?= $mapelData ?? '[]' ?>, backgroundColor: palette, borderWidth: 2, borderColor: '#0A0F1E' }]
-    },
-    options: {
-        responsive: true, maintainAspectRatio: true, cutout: '65%',
-        plugins: { legend: { position: 'bottom', labels: { padding: 12, boxWidth: 12, boxHeight: 12 } } }
-    }
-});
+new ApexCharts(document.getElementById('chartMateriMapel'), {
+    ...commonOptions,
+    chart: { ...commonOptions.chart, type: 'donut', height: 280 },
+    series: <?= $mapelData ?? '[]' ?>,
+    labels: <?= $mapelLabels ?? '[]' ?>,
+    colors: palette,
+    stroke: { show: false },
+    legend: { position: 'bottom' }
+}).render();
 
 <?php elseif ($role === 'Guru'): ?>
 /* ── Nilai per Ujian ─────────────── */
 <?php if (!empty($nilaiPerUlangan)): ?>
-new Chart(document.getElementById('chartNilaiGuru'), {
-    type: 'bar',
-    data: {
-        labels: <?= $nilaiLabels ?>,
-        datasets: [
-            { label: 'Rata-rata Nilai', data: <?= $nilaiData ?>, backgroundColor: 'rgba(129,140,248,0.75)', borderColor: '#818CF8', borderWidth: 1.5, borderRadius: 6 },
-            { label: 'KKM',            data: <?= $nilaiKkm ?>,  type: 'line', borderColor: '#EF4444', borderDash: [5,4], borderWidth: 2, pointRadius: 0, fill: false }
-        ]
-    },
-    options: {
-        responsive: true, maintainAspectRatio: true,
-        plugins: { legend: { labels: { boxWidth: 14 } } },
-        scales: {
-            y: { min: 0, max: 100, grid: { color: gridColor } },
-            x: { grid: { display: false } }
-        }
-    }
-});
+new ApexCharts(document.getElementById('chartNilaiGuru'), {
+    ...commonOptions,
+    chart: { ...commonOptions.chart, height: 280, type: 'line' },
+    series: [
+        { name: 'Rata-rata Nilai', type: 'column', data: <?= $nilaiData ?> },
+        { name: 'KKM', type: 'line', data: <?= $nilaiKkm ?> }
+    ],
+    stroke: { width: [0, 3], curve: 'smooth', dashArray: [0, 5] },
+    xaxis: { categories: <?= $nilaiLabels ?> },
+    colors: ['#818CF8', '#EF4444'],
+    yaxis: { min: 0, max: 100 },
+    plotOptions: { bar: { borderRadius: 4, columnWidth: '40%' } }
+}).render();
 <?php endif; ?>
 
 /* ── Tipe Soal Doughnut ──────────── */
 <?php if (!empty($tipesSoal)): ?>
-new Chart(document.getElementById('chartTipesSoal'), {
-    type: 'doughnut',
-    data: {
-        labels: <?= $tipeLabels ?>,
-        datasets: [{ data: <?= $tipeData ?>, backgroundColor: palette, borderWidth: 2, borderColor: '#0A0F1E' }]
-    },
-    options: {
-        responsive: true, maintainAspectRatio: true, cutout: '60%',
-        plugins: { legend: { position: 'bottom', labels: { padding: 10, boxWidth: 12, boxHeight: 12 } } }
-    }
-});
+new ApexCharts(document.getElementById('chartTipesSoal'), {
+    ...commonOptions,
+    chart: { ...commonOptions.chart, type: 'donut', height: 280 },
+    series: <?= $tipeData ?>,
+    labels: <?= $tipeLabels ?>,
+    colors: palette,
+    stroke: { show: false },
+    legend: { position: 'bottom' }
+}).render();
 <?php endif; ?>
 
 <?php elseif ($role === 'Siswa' && !empty($stats['kelas_info'])): ?>
@@ -699,42 +730,36 @@ new Chart(document.getElementById('chartTipesSoal'), {
     $siswaNilai  = json_encode(array_column($nilaiSiswa,'nilai_akhir'));
     $siswaKkm    = json_encode(array_column($nilaiSiswa,'kkm'));
 ?>
-new Chart(document.getElementById('chartNilaiSiswa'), {
-    type: 'bar',
-    data: {
-        labels: <?= $siswaLabels ?>,
-        datasets: [
-            { label: 'Nilai Saya', data: <?= $siswaNilai ?>, backgroundColor: 'rgba(129,140,248,0.75)', borderColor: '#818CF8', borderWidth: 1.5, borderRadius: 6 },
-            { label: 'KKM',       data: <?= $siswaKkm ?>,   type: 'line', borderColor: '#EF4444', borderDash: [5,4], borderWidth: 2, pointRadius: 0, fill: false }
-        ]
-    },
-    options: {
-        responsive: true, maintainAspectRatio: true,
-        plugins: { legend: { labels: { boxWidth: 14 } } },
-        scales: {
-            y: { min: 0, max: 100, grid: { color: gridColor } },
-            x: { grid: { display: false } }
-        }
-    }
-});
+new ApexCharts(document.getElementById('chartNilaiSiswa'), {
+    ...commonOptions,
+    chart: { ...commonOptions.chart, height: 280, type: 'area' },
+    series: [
+        { name: 'Nilai Saya', type: 'area', data: <?= $siswaNilai ?> },
+        { name: 'KKM', type: 'line', data: <?= $siswaKkm ?> }
+    ],
+    stroke: { width: [2, 3], curve: 'smooth', dashArray: [0, 5] },
+    fill: { type: 'gradient', gradient: { shadeIntensity: 1, opacityFrom: 0.4, opacityTo: 0.05, stops: [0, 90, 100] } },
+    xaxis: { categories: <?= $siswaLabels ?> },
+    colors: ['#818CF8', '#EF4444'],
+    yaxis: { min: 0, max: 100 }
+}).render();
 <?php endif; ?>
 
-/* ── Kehadiran Doughnut ──────────── */
-new Chart(document.getElementById('chartKehadiran'), {
-    type: 'doughnut',
-    data: {
-        labels: ['Hadir','Sakit','Izin','Alfa'],
-        datasets: [{
-            data: [<?= $stats['total_hadir']??0 ?>,<?= $stats['total_sakit']??0 ?>,<?= $stats['total_izin']??0 ?>,<?= $stats['total_alfa']??0 ?>],
-            backgroundColor: ['#22C55E','#38BDF8','#F59E0B','#EF4444'],
-            borderWidth: 2, borderColor: '#0A0F1E'
-        }]
+/* ── Kehadiran RadialBar ──────────── */
+new ApexCharts(document.getElementById('chartKehadiran'), {
+    ...commonOptions,
+    chart: { ...commonOptions.chart, type: 'radialBar', height: 250 },
+    series: [<?= $stats['pct_hadir'] ?? 0 ?>],
+    colors: ['<?= ($stats['pct_hadir']??0) >= 75 ? '#22C55E' : (($stats['pct_hadir']??0) >= 50 ? '#F59E0B' : '#EF4444') ?>'],
+    plotOptions: {
+        radialBar: {
+            hollow: { size: '65%' },
+            track: { background: isDarkMode ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' },
+            dataLabels: { show: false } // We already have custom HTML label above it
+        }
     },
-    options: {
-        responsive: true, maintainAspectRatio: true, cutout: '70%',
-        plugins: { legend: { display: false } }
-    }
-});
+    stroke: { lineCap: 'round' }
+}).render();
 <?php endif; ?>
 
 /* ── Animasi fadeUp ──────────────── */

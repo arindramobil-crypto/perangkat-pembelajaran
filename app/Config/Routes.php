@@ -8,6 +8,9 @@ $routes->match(['GET', 'POST'], 'login', 'Auth::login');
 $routes->get('logout', 'Auth::logout');
 $routes->get('dashboard', 'Dashboard::index', ['filter' => 'authGuard']);
 
+// Setup Gamifikasi Sementara
+$routes->get('setup-gamifikasi', 'SetupGamifikasi::index');
+
 // Pengaturan Sekolah (Admin only)
 $routes->group('pengaturan', ['filter' => 'adminGuard'], static function ($routes) {
     $routes->get('sekolah',             'PengaturanSekolah::index');
@@ -170,3 +173,7 @@ $routes->group('export', ['filter' => 'authGuard'], static function ($routes) {
     $routes->get('jurnal',          'Export::jurnal');
     $routes->get('prota_promes',    'Export::prota_promes');
 });
+
+// ── Validasi Dokumen (Publik) ──────────────────────────────────────
+$routes->get('validasi/dokumen/(:segment)', 'Validasi::dokumen/$1');
+
