@@ -3,13 +3,13 @@
 
 <div class="mb-4 d-flex justify-content-between align-items-center">
     <div>
-        <a href="<?= base_url('rpp') ?>" class="text-decoration-none text-lms-muted mb-2 d-inline-block"><i class="bi bi-arrow-left"></i> Kembali ke Bank RPP</a>
+        <a href="<?= base_url('rpp') ?>" class="text-decoration-none text-lms-muted mb-2 d-inline-block"><i class="bi bi-arrow-left"></i> Kembali ke Bank PPM</a>
         <h4 style="color:white;font-weight:800;margin:0;">
             <i class="bi bi-file-earmark-richtext me-2" style="color:#818CF8;"></i><?= esc($rpp['judul']) ?>
         </h4>
     </div>
     <?php if(session()->get('role') === 'Guru'): ?>
-    <a href="<?= base_url('rpp/edit/'.$rpp['id']) ?>" class="btn btn-outline-light"><i class="bi bi-pencil-square me-1"></i> Edit RPP</a>
+    <a href="<?= base_url('rpp/edit/'.$rpp['id']) ?>" class="btn btn-outline-light"><i class="bi bi-pencil-square me-1"></i> Edit PPM</a>
     <?php endif; ?>
 </div>
 

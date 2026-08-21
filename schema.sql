@@ -208,6 +208,7 @@ CREATE TABLE IF NOT EXISTS `jawaban_siswa` (
   `siswa_id` INT NOT NULL,
   `nilai_akhir` DECIMAL(5,2) DEFAULT 0.00,
   `status` ENUM('Mengerjakan', 'Selesai') DEFAULT 'Mengerjakan',
+  `status_penilaian` ENUM('Selesai', 'Menunggu Koreksi') DEFAULT 'Selesai',
   `waktu_mulai` DATETIME NOT NULL,
   `waktu_selesai` DATETIME DEFAULT NULL,
   UNIQUE KEY `unique_attempt` (`ulangan_id`, `siswa_id`),
@@ -277,4 +278,22 @@ CREATE TABLE IF NOT EXISTS `rpp_digital` (
   CONSTRAINT `fk_rpp_guru` FOREIGN KEY (`guru_id`) REFERENCES `gurus` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_rpp_mapel` FOREIGN KEY (`mapel_id`) REFERENCES `mata_pelajaran` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_rpp_kelas` FOREIGN KEY (`kelas_id`) REFERENCES `kelas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB;
+
+-- 21. Tabel Prota dan Promes
+CREATE TABLE IF NOT EXISTS `prota_promes` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `guru_id` INT NOT NULL,
+  `mapel_id` INT NOT NULL,
+  `kelas_id` INT NOT NULL,
+  `tipe` ENUM('PROTA', 'PROMES') NOT NULL DEFAULT 'PROTA',
+  `materi_pokok` TEXT DEFAULT NULL,
+  `alokasi_waktu` VARCHAR(100) DEFAULT NULL,
+  `alokasi_mingguan` TEXT DEFAULT NULL,
+  `keterangan` TEXT DEFAULT NULL,
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  CONSTRAINT `fk_prota_guru` FOREIGN KEY (`guru_id`) REFERENCES `gurus` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_prota_mapel` FOREIGN KEY (`mapel_id`) REFERENCES `mata_pelajaran` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_prota_kelas` FOREIGN KEY (`kelas_id`) REFERENCES `kelas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB;

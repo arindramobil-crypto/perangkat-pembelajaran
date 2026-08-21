@@ -275,16 +275,16 @@ $_logoUrl     = $_logoFile ? base_url('uploads/logo/' . $_logoFile) : null;
                     <span>Jurnal Mengajar Harian</span>
                 </a>
                 <a href="<?= base_url('rpp') ?>"
-                   data-label="Modul Ajar"
+                   data-label="PPM Digital"
                    class="lms-nav-link <?= str_contains(uri_string(), 'rpp') ? 'active' : '' ?>">
                     <i class="bi bi-file-earmark-richtext"></i>
-                    <span>Bank RPP / Modul Ajar</span>
+                    <span>PPM Digital</span>
                 </a>
                 <a href="<?= base_url('ai-assistant') ?>"
                    data-label="AI Assistant"
                    class="lms-nav-link <?= str_contains(uri_string(), 'ai-assistant') ? 'active' : '' ?>">
                     <i class="bi bi-robot text-primary"></i>
-                    <span>AI Assistant (RPP/Materi)</span>
+                    <span>AI Assistant (PPM/Materi)</span>
                 </a>
                 <a href="<?= base_url('prota') ?>"
                    data-label="Prota & Promes"

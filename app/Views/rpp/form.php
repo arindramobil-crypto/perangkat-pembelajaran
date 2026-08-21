@@ -2,7 +2,7 @@
 <?= $this->section('content') ?>
 
 <div class="mb-4">
-    <a href="<?= base_url('rpp') ?>" class="text-decoration-none text-lms-muted mb-2 d-inline-block"><i class="bi bi-arrow-left"></i> Kembali ke Bank RPP</a>
+    <a href="<?= base_url('rpp') ?>" class="text-decoration-none text-lms-muted mb-2 d-inline-block"><i class="bi bi-arrow-left"></i> Kembali ke Bank PPM</a>
     <h4 style="color:white;font-weight:800;margin:0;">
         <i class="bi bi-cloud-arrow-up me-2" style="color:#818CF8;"></i><?= esc($title) ?>
     </h4>
@@ -37,12 +37,12 @@
         </div>
 
         <div class="mb-4">
-            <label class="form-label text-white small">Judul RPP / Modul Ajar <span class="text-danger">*</span></label>
+            <label class="form-label text-white small">Judul PPM / Modul Ajar <span class="text-danger">*</span></label>
             <input type="text" name="judul" class="form-control lms-input" required placeholder="Contoh: Modul Ajar Bab 1: Sistem Persamaan Linear" value="<?= isset($rpp) ? esc($rpp['judul']) : '' ?>">
         </div>
 
         <div class="mb-4">
-            <label class="form-label text-white small">Lampiran File RPP (PDF/Word)</label>
+            <label class="form-label text-white small">Lampiran File PPM (PDF/Word)</label>
             <?php if(isset($rpp) && $rpp['file_path']): ?>
                 <div class="mb-2 p-2 rounded" style="background:rgba(255,255,255,0.05); border:1px solid var(--lms-border);">
                     <i class="bi bi-file-earmark-pdf text-danger"></i> File saat ini: <a href="<?= base_url('uploads/rpp/' . $rpp['file_path']) ?>" target="_blank" class="text-accent"><?= esc($rpp['file_path']) ?></a>
@@ -54,7 +54,7 @@
 
         <div class="d-flex justify-content-end border-top border-secondary border-opacity-25 pt-4">
             <a href="<?= base_url('rpp') ?>" class="btn btn-secondary me-2">Batal</a>
-            <button type="submit" class="btn btn-primary px-4"><i class="bi bi-save me-1"></i> Simpan RPP</button>
+            <button type="submit" class="btn btn-primary px-4"><i class="bi bi-save me-1"></i> Simpan PPM</button>
         </div>
     </form>
 </div>

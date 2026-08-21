@@ -23,7 +23,7 @@ class Rpp extends BaseController
 
         $rppModel = new RppModel();
         $data = [
-            'title' => 'Bank RPP / Modul Ajar Digital',
+            'title' => 'Bank PPM / Perencanaan Pembelajaran Mendalam',
             'rpp'   => $rppModel->getRppByGuru($guru['id'])
         ];
 
@@ -38,7 +38,7 @@ class Rpp extends BaseController
         $mapelModel = new MataPelajaranModel();
         
         $data = [
-            'title' => 'Upload / Buat RPP Baru',
+            'title' => 'Upload / Buat PPM Baru',
             'kelas' => $kelasModel->findAll(),
             'mapel' => $mapelModel->findAll()
         ];
@@ -54,7 +54,7 @@ class Rpp extends BaseController
         $mapelModel = new MataPelajaranModel();
         
         $data = [
-            'title' => 'Buat RPP Digital',
+            'title' => 'Buat PPM Digital',
             'kelas' => $kelasModel->findAll(),
             'mapel' => $mapelModel->findAll()
         ];
@@ -101,16 +101,16 @@ class Rpp extends BaseController
                 $data['file_path'] = $newName;
                 $data['konten'] = null;
             } else if (!$id) {
-                return redirect()->back()->with('error', 'File RPP wajib diunggah.');
+                return redirect()->back()->with('error', 'File PPM wajib diunggah.');
             }
         }
 
         if ($id) {
             $rppModel->update($id, $data);
-            $msg = 'RPP berhasil diperbarui!';
+            $msg = 'PPM berhasil diperbarui!';
         } else {
             $rppModel->insert($data);
-            $msg = 'RPP berhasil ditambahkan!';
+            $msg = 'PPM berhasil ditambahkan!';
         }
 
         return redirect()->to('/rpp')->with('success', $msg);
@@ -125,14 +125,14 @@ class Rpp extends BaseController
         $rpp = $rppModel->find($id);
 
         if (!$rpp || $rpp['guru_id'] != $guru['id']) {
-            return redirect()->to('/rpp')->with('error', 'RPP tidak ditemukan.');
+            return redirect()->to('/rpp')->with('error', 'PPM tidak ditemukan.');
         }
 
         $kelasModel = new KelasModel();
         $mapelModel = new MataPelajaranModel();
         
         $data = [
-            'title' => 'Edit RPP',
+            'title' => 'Edit PPM',
             'rpp'   => $rpp,
             'kelas' => $kelasModel->findAll(),
             'mapel' => $mapelModel->findAll()
@@ -158,10 +158,10 @@ class Rpp extends BaseController
                         ->join('users', 'users.id = gurus.user_id')
                         ->find($id);
 
-        if (!$rpp) return redirect()->to('/dashboard')->with('error', 'RPP tidak ditemukan.');
+        if (!$rpp) return redirect()->to('/dashboard')->with('error', 'PPM tidak ditemukan.');
 
         $data = [
-            'title' => 'Detail RPP',
+            'title' => 'Detail PPM',
             'rpp'   => $rpp
         ];
 
@@ -181,14 +181,14 @@ class Rpp extends BaseController
                         ->find($id);
 
         if (!$rpp || empty($rpp['konten'])) {
-            return redirect()->back()->with('error', 'Format RPP Digital tidak ditemukan.');
+            return redirect()->back()->with('error', 'Format PPM Digital tidak ditemukan.');
         }
 
         $pengaturanModel = new \App\Models\PengaturanSekolahModel();
         $sekolah = $pengaturanModel->first();
 
         $data = [
-            'title'   => 'Cetak RPP: ' . $rpp['judul'],
+            'title'   => 'Cetak PPM: ' . $rpp['judul'],
             'rpp'     => $rpp,
             'template'=> json_decode($rpp['konten'], true),
             'sekolah' => $sekolah
@@ -206,7 +206,7 @@ class Rpp extends BaseController
         $rpp = $rppModel->find($id);
 
         if (!$rpp || $rpp['guru_id'] != $guru['id']) {
-            return redirect()->to('/rpp')->with('error', 'RPP tidak ditemukan.');
+            return redirect()->to('/rpp')->with('error', 'PPM tidak ditemukan.');
         }
 
         // Hapus file fisik jika ada
@@ -215,6 +215,6 @@ class Rpp extends BaseController
         }
 
         $rppModel->delete($id);
-        return redirect()->to('/rpp')->with('success', 'RPP berhasil dihapus.');
+        return redirect()->to('/rpp')->with('success', 'PPM berhasil dihapus.');
     }
 }

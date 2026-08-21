@@ -2,11 +2,11 @@
 <?= $this->section('content') ?>
 
 <div class="mb-4">
-    <a href="<?= base_url('rpp') ?>" class="text-decoration-none text-lms-muted mb-2 d-inline-block"><i class="bi bi-arrow-left"></i> Kembali ke Bank RPP</a>
+    <a href="<?= base_url('rpp') ?>" class="text-decoration-none text-lms-muted mb-2 d-inline-block"><i class="bi bi-arrow-left"></i> Kembali ke Bank PPM</a>
     <h4 style="color:var(--lms-text);font-weight:800;margin:0;">
         <i class="bi bi-magic me-2 text-accent"></i><?= esc($title) ?>
     </h4>
-    <small class="text-lms-muted">Isi form di bawah ini untuk membuat RPP Kurikulum Merdeka secara otomatis.</small>
+    <small class="text-lms-muted">Isi form di bawah ini untuk membuat PPM Kurikulum Merdeka secara otomatis.</small>
 </div>
 
 <form action="<?= base_url('rpp/save') ?>" method="post">
@@ -41,8 +41,8 @@
         </div>
         
         <div class="mb-3">
-            <label class="form-label text-white small">Judul Dokumen RPP <span class="text-danger">*</span></label>
-            <input type="text" name="judul" class="form-control lms-input" required placeholder="Contoh: RPP Validitas dan Pengolahan Data" value="<?= isset($rpp) ? esc($rpp['judul']) : '' ?>">
+            <label class="form-label text-white small">Judul Dokumen PPM <span class="text-danger">*</span></label>
+            <input type="text" name="judul" class="form-control lms-input" required placeholder="Contoh: PPM Validitas dan Pengolahan Data" value="<?= isset($rpp) ? esc($rpp['judul']) : '' ?>">
         </div>
 
         <div class="mb-3">

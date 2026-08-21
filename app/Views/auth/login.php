@@ -602,7 +602,7 @@ html, body {
                 </div>
                 <div class="feature-text">
                     <strong>Modul Ajar & Perangkat Guru</strong>
-                    <span>Buat RPP digital dan kelola jurnal mengajar harian</span>
+                    <span>Buat PPM digital dan kelola jurnal mengajar harian</span>
                 </div>
             </div>
         </div>

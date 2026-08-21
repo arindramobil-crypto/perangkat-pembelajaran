@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
@@ -99,7 +99,7 @@
         <button onclick="window.close()" style="padding:8px 16px; background:#6c757d; color:#fff; border:none; cursor:pointer; margin-left:10px;">Tutup</button>
     </div>
 
-    <h3>RENCANA PEMBELAJARAN (RPP) KURIKULUM MERDEKA</h3>
+    <h3>PERENCANAAN PEMBELAJARAN MENDALAM (PPM) KURIKULUM MERDEKA</h3>
 
     <table class="header-table">
         <tr>

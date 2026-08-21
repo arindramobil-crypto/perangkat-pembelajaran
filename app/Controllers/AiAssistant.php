@@ -12,7 +12,7 @@ class AiAssistant extends BaseController
         }
 
         $data = [
-            'title' => 'AI Assistant - RPP & Materi',
+            'title' => 'AI Assistant - PPM & Materi',
             'role'  => $role
         ];
 
@@ -37,7 +37,8 @@ class AiAssistant extends BaseController
 
         $apiKey = env('GEMINI_API_KEY');
         
-        $prompt = "Buatkan dokumen pendidikan berjenis {$tipe} untuk kelas {$kelas} dengan durasi {$durasi}. Topik: {$topik}. Tolong format dalam HTML yang rapi (menggunakan tag <h2>, <h3>, <ul>, <p> dll) agar bisa langsung ditampilkan.";
+        $jenisDokumen = (strtolower($tipe) === 'rpp') ? 'Perencanaan Pembelajaran Mendalam (PPM)' : 'Materi Bahan Ajar';
+        $prompt = "Buatkan dokumen pendidikan berjenis {$jenisDokumen} untuk kelas {$kelas} dengan durasi {$durasi}. Topik: {$topik}. Khusus untuk PPM, sesuaikan dengan struktur Kurikulum Mendalam (misal: Pemahaman Bermakna, Pertanyaan Pemantik, Skenario Pembelajaran Mendalam, dan Asesmen Komprehensif). Tolong format dalam HTML yang rapi (menggunakan tag <h2>, <h3>, <ul>, <p> dll) tanpa tag <html> atau <body> agar bisa langsung ditampilkan.";
 
         if (empty($apiKey) || $apiKey === 'your_gemini_api_key_here') {
             // Mode Simulasi
@@ -68,25 +69,25 @@ class AiAssistant extends BaseController
             return "
             <div class='mb-4'>
                 <span class='badge bg-warning text-dark mb-2'>Mode Simulasi AI</span>
-                <h2>Rencana Pelaksanaan Pembelajaran (RPP)</h2>
+                <h2>Perencanaan Pembelajaran Mendalam (PPM)</h2>
                 <p><strong>Mata Pelajaran:</strong> Sesuai Topik<br>
                 <strong>Kelas:</strong> {$kelas}<br>
                 <strong>Alokasi Waktu:</strong> {$durasi}<br>
                 <strong>Materi Pokok:</strong> {$topik}</p>
                 <hr>
-                <h4>A. Tujuan Pembelajaran</h4>
+                <h4>A. Pemahaman Bermakna & Pertanyaan Pemantik</h4>
                 <ul>
-                    <li>Siswa dapat memahami konsep dasar dari {$topik}.</li>
-                    <li>Siswa mampu mengaplikasikan prinsip {$topik} dalam kehidupan sehari-hari.</li>
+                    <li><strong>Pemahaman Bermakna:</strong> Memahami bahwa {$topik} sangat relevan dan dapat diterapkan dalam penyelesaian masalah sehari-hari.</li>
+                    <li><strong>Pertanyaan Pemantik:</strong> Mengapa {$topik} penting untuk dipelajari? Bagaimana kaitannya dengan lingkungan kita?</li>
                 </ul>
-                <h4>B. Kegiatan Pembelajaran</h4>
+                <h4>B. Skenario Pembelajaran Mendalam</h4>
                 <ol>
-                    <li><strong>Pendahuluan (15 menit):</strong> Apersepsi, menyampaikan tujuan, dan motivasi.</li>
-                    <li><strong>Kegiatan Inti (" . ((int)$durasi - 30) . " menit):</strong> Eksplorasi materi {$topik}, diskusi kelompok, dan presentasi.</li>
-                    <li><strong>Penutup (15 menit):</strong> Kesimpulan, refleksi, dan tugas.</li>
+                    <li><strong>Eksplorasi Konsep (15 menit):</strong> Diskusi pemantik untuk menggali pengetahuan awal siswa mengenai {$topik}.</li>
+                    <li><strong>Investigasi & Analisis (" . ((int)$durasi - 45) . " menit):</strong> Pembelajaran berbasis proyek/masalah (PBL) dimana siswa menganalisis studi kasus {$topik} secara mendalam.</li>
+                    <li><strong>Refleksi & Konfirmasi (30 menit):</strong> Siswa mempresentasikan temuan, berdiskusi, dan guru memberikan penguatan bermakna.</li>
                 </ol>
-                <h4>C. Penilaian</h4>
-                <p>Penilaian dilakukan melalui observasi sikap, tes tertulis, dan presentasi kelompok terkait materi {$topik}.</p>
+                <h4>C. Asesmen Komprehensif</h4>
+                <p>Penilaian formatif melalui observasi keaktifan diskusi dan rubrik kemampuan berpikir kritis. Penilaian sumatif melalui hasil proyek/analisis terkait {$topik}.</p>
             </div>
             ";
         } else {

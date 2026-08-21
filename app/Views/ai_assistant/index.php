@@ -7,7 +7,7 @@
             <h3 class="fw-bold mb-0"><i class="bi bi-robot text-primary"></i> AI Assistant</h3>
             <span class="badge bg-primary rounded-pill px-3 py-2">Versi Beta</span>
         </div>
-        <p class="text-muted mt-2">Buat draft RPP (Rencana Pelaksanaan Pembelajaran) atau Materi secara instan dengan bantuan AI.</p>
+        <p class="text-muted mt-2">Buat draft PPM (Perencanaan Pembelajaran Mendalam) atau Materi secara instan dengan bantuan AI.</p>
     </div>
 </div>
 
@@ -23,6 +23,7 @@
                 <?php endif; ?>
 
                 <form action="<?= base_url('ai-assistant/generate') ?>" method="post">
+                    <?= csrf_field() ?>
                     <div class="mb-3">
                         <label class="form-label fw-bold">Topik / Judul Materi</label>
                         <input type="text" name="topik" class="form-control" placeholder="Contoh: Pemrograman Web Dasar, Sejarah Kemerdekaan..." required>
@@ -32,7 +33,7 @@
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-bold">Tipe Dokumen</label>
                             <select name="tipe" class="form-select" required>
-                                <option value="RPP">Rencana Pelaksanaan Pembelajaran (RPP)</option>
+                                <option value="RPP">Perencanaan Pembelajaran Mendalam (PPM)</option>
                                 <option value="Materi">Materi Bahan Ajar</option>
                             </select>
                         </div>
