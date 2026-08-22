@@ -109,15 +109,17 @@ CREATE TABLE IF NOT EXISTS `jadwal` (
 CREATE TABLE IF NOT EXISTS `materi` (
   `id` INT AUTO_INCREMENT PRIMARY KEY,
   `guru_id` INT NOT NULL,
-  `mapel_id` INT NOT NULL,
-  `judul` VARCHAR(255) NOT NULL,
+  `jadwal_id` INT NOT NULL,
+  `judul_materi` VARCHAR(255) NOT NULL,
   `deskripsi` TEXT DEFAULT NULL,
-  `file_path` VARCHAR(255) DEFAULT NULL, -- Menyimpan path file PDF, slide, atau e-book
-  `link_external` VARCHAR(255) DEFAULT NULL, -- Menyimpan link YouTube, Google Drive, dsb.
+  `file_materi` VARCHAR(255) DEFAULT NULL,
+  `nama_asli_file` VARCHAR(255) DEFAULT NULL,
+  `tipe_konten` ENUM('file', 'link') NOT NULL DEFAULT 'file',
+  `link_eksternal` VARCHAR(255) DEFAULT NULL,
   `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   CONSTRAINT `fk_materi_guru` FOREIGN KEY (`guru_id`) REFERENCES `gurus` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_materi_mapel` FOREIGN KEY (`mapel_id`) REFERENCES `mata_pelajaran` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `fk_materi_jadwal` FOREIGN KEY (`jadwal_id`) REFERENCES `jadwal` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
 -- 10. Tabel Distribusi Materi ke Kelas (Relasi Materi - Kelas - Tahun Pelajaran)
