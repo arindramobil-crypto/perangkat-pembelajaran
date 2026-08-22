@@ -297,3 +297,17 @@ CREATE TABLE IF NOT EXISTS `prota_promes` (
   CONSTRAINT `fk_prota_mapel` FOREIGN KEY (`mapel_id`) REFERENCES `mata_pelajaran` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_prota_kelas` FOREIGN KEY (`kelas_id`) REFERENCES `kelas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB;
+
+-- 22. Tabel Notifikasi
+CREATE TABLE IF NOT EXISTS `notifikasi` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `user_id` INT NOT NULL,
+  `tipe` VARCHAR(50) NOT NULL,
+  `judul` VARCHAR(255) NOT NULL,
+  `pesan` TEXT NOT NULL,
+  `url` VARCHAR(255) DEFAULT NULL,
+  `is_read` TINYINT(1) DEFAULT 0,
+  `ref_id` INT DEFAULT NULL,
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT `fk_notifikasi_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB;
