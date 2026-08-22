@@ -78,6 +78,7 @@
             
             <!-- Modal Body -->
             <form action="<?= base_url('master/anggota-kelas/save') ?>" method="post" style="display: flex; flex-direction: column; max-height: calc(100vh - 120px);">
+                <?= csrf_field() ?>
                 <input type="hidden" name="kelas_id" value="<?= $selected_kelas ?>">
                 <input type="hidden" name="tahun_pelajaran_id" value="<?= $selected_tahun ?>">
                 

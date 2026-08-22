@@ -56,6 +56,7 @@
         <h3 style="color: white; margin-bottom: 1.5rem;">Buat Ujian Baru</h3>
         
         <form action="<?= base_url('ulangan/save') ?>" method="post">
+            <?= csrf_field() ?>
             <input type="hidden" name="guru_id" value="<?= $guru_id ?>">
             
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">

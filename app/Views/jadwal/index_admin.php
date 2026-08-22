@@ -57,6 +57,7 @@
         
         <!-- Modal Body -->
         <form action="<?= base_url('jadwal/save') ?>" method="post" style="display: flex; flex-direction: column;">
+            <?= csrf_field() ?>
             <div style="padding: 1.5rem; overflow-y: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
                 <div class="form-group" style="grid-column: span 2;">
                     <label class="form-label" style="font-size: 0.875rem; margin-bottom: 0.5rem; display: block; color: var(--lms-text-muted);">Tahun Pelajaran (Aktif)</label>

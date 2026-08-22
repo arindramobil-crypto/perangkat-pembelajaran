@@ -13,6 +13,7 @@
 </div>
 
 <form action="<?= base_url('ulangan/submit_jawaban') ?>" method="post" id="formUjian">
+    <?= csrf_field() ?>
     <input type="hidden" name="attempt_id" value="<?= $attempt['id'] ?>">
     
     <div style="display: grid; grid-template-columns: 1fr 300px; gap: 2rem;">

@@ -11,6 +11,7 @@
     </div>
 
     <form action="<?= base_url('presensi/save') ?>" method="post">
+        <?= csrf_field() ?>
         <input type="hidden" name="jadwal_id" value="<?= $jadwal['id'] ?>">
         
         <div style="display: grid; grid-template-columns: 1fr 1fr 2fr; gap: 1rem; margin-bottom: 2rem;">
